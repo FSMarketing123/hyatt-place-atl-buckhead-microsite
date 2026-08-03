@@ -361,7 +361,7 @@
       <div class="gate-err" id="gate-err">Incorrect password. Please try again.</div>
       <button type="submit">Enter</button>
     </form>
-    <div class="gate-foot">Hyatt Place Atlanta Buckhead &middot; Buckhead CBD, Atlanta</div>
+    <div class="gate-foot">Hyatt Place Atlanta/Buckhead &bull; Buckhead, Atlanta</div>
   </div>
 </div>
 <script>
@@ -384,11 +384,12 @@
     var PASS_HASH=3143007910376933;
     function cyrb53(s,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<s.length;i++){ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
     function unlock(){gate.classList.add('hide');document.body.classList.remove('gated');}
-    if(sessionStorage.getItem('hpab_ok')==='1'){unlock();}
-    else{document.body.classList.add('gated');setTimeout(function(){if(input)input.focus();},60);}
+    // Always require the password on every load — no persistence across
+    // refresh, tab close, or new window.
+    document.body.classList.add('gated');setTimeout(function(){if(input)input.focus();},60);
     if(form)form.addEventListener('submit',function(e){
       e.preventDefault();
-      if(cyrb53((input.value||'').trim())===PASS_HASH){sessionStorage.setItem('hpab_ok','1');unlock();}
+      if(cyrb53((input.value||'').trim())===PASS_HASH){unlock();}
       else{err.classList.add('show');input.value='';input.focus();}
     });
   })();
