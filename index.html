@@ -316,9 +316,65 @@
   @media(max-width:520px){.contacts{grid-template-columns:1fr}}
 
   .flag{color:#b08d57;font-style:italic}
+
+  /* ---------- ACCESS GATE (password screen) ---------- */
+  body.gated{overflow:hidden}
+  #gate{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        padding:40px 24px;text-align:center;color:#fff;
+        background-color:#021d49;
+        background-image:radial-gradient(rgba(255,255,255,.25) 1.6px,transparent 1.7px);
+        background-size:22px 22px}
+  #gate.hide{display:none}
+  #gate .gate-logo{height:clamp(52px,7vw,66px);width:auto;margin-bottom:clamp(26px,4vw,38px)}
+  #gate h1{font-family:var(--font-cormorant);font-weight:300;font-size:clamp(27px,4vw,40px);color:#fff;margin:0;letter-spacing:.01em}
+  #gate .gate-rule{width:54px;height:1px;background:var(--gold);margin:20px auto 22px}
+  #gate p{font-family:var(--font-poppins);font-size:14px;color:rgba(255,255,255,.72);line-height:1.7;margin:0 0 30px;max-width:46ch}
+  #gate form{width:min(460px,100%);display:flex;flex-direction:column;gap:12px}
+  #gate input{width:100%;padding:16px 18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.24);
+              color:#fff;font-family:var(--font-poppins);font-size:14px;border-radius:2px;text-align:center;outline:none;transition:border-color .2s}
+  #gate input::placeholder{color:rgba(255,255,255,.5);letter-spacing:.16em;text-transform:uppercase;font-size:12px}
+  #gate input:focus{border-color:var(--gold)}
+  #gate .gate-err{min-height:15px;font-size:11.5px;letter-spacing:.06em;color:#e6b0b0;opacity:0;transition:opacity .2s}
+  #gate .gate-err.show{opacity:1}
+  #gate button{width:100%;padding:16px;background:var(--gold);color:#021d49;border:0;cursor:pointer;
+                font-family:var(--font-poppins);font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;border-radius:2px;transition:background .2s}
+  #gate button:hover{background:var(--red-lt)}
+  #gate .gate-foot{margin-top:clamp(30px,5vw,44px);font-family:var(--font-poppins);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 </style>
 </head>
 <body>
+
+<!-- ================= ACCESS GATE ================= -->
+<div id="gate" role="dialog" aria-modal="true" aria-label="Access required">
+  <img class="gate-logo" src="assets/HWE-logo-white.svg" alt="Hodges Ward Elliott">
+  <h1>Confidential Offering Memorandum</h1>
+  <div class="gate-rule"></div>
+  <p>This offering is password-protected. Please enter the access password provided to you.</p>
+  <form id="gate-form" autocomplete="off">
+    <input id="gate-input" type="password" placeholder="Access password" aria-label="Access password" autocomplete="off" spellcheck="false">
+    <div class="gate-err" id="gate-err">Incorrect password. Please try again.</div>
+    <button type="submit">Enter</button>
+  </form>
+  <div class="gate-foot">Hyatt Place Atlanta Buckhead &middot; Buckhead CBD, Atlanta</div>
+</div>
+<script>
+  (function(){
+    var gate=document.getElementById('gate'),form=document.getElementById('gate-form'),
+        input=document.getElementById('gate-input'),err=document.getElementById('gate-err');
+    // Access password (hashed — change the password by asking me to regenerate this value)
+    var PASS_HASH=5558333819464026;
+    function cyrb53(s,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<s.length;i++){ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
+    function unlock(){gate.classList.add('hide');document.body.classList.remove('gated');}
+    if(sessionStorage.getItem('hpab_ok')==='1'){unlock();}
+    else{document.body.classList.add('gated');setTimeout(function(){if(input)input.focus();},60);}
+    if(form)form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(cyrb53((input.value||'').trim())===PASS_HASH){sessionStorage.setItem('hpab_ok','1');unlock();}
+      else{err.classList.add('show');input.value='';input.focus();}
+    });
+  })();
+</script>
+
 
 <!-- ================= NAV ================= -->
 <nav class="nav" id="nav">
