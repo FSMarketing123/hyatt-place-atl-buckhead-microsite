@@ -323,10 +323,10 @@
         color:#fff;background-color:#021d49;overflow:hidden}
   #gate.hide{display:none}
   #gate .gate-dots{position:absolute;inset:0;z-index:0;pointer-events:none;
-                   background-image:radial-gradient(circle,rgba(255,255,255,.15) 1px,transparent 1.4px);
+                   background-image:radial-gradient(circle,rgba(255,255,255,.2) 1px,transparent 1.4px);
                    background-repeat:repeat;background-position:center;
-                   -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 100%);
-                   mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 100%)}
+                   -webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,0) 100%);
+                   mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,0) 100%)}
   #gate .gate-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
                     text-align:center;padding:40px 24px;max-width:100%}
   #gate .gate-logo{height:clamp(52px,7vw,66px);width:auto;margin-bottom:clamp(26px,4vw,38px)}
@@ -373,7 +373,7 @@
     // dots and symmetric (equal) spacing on all edges, at any viewport size.
     function layoutDots(){
       if(!dots) return;
-      var w=window.innerWidth,h=window.innerHeight,T=26;
+      var w=window.innerWidth,h=window.innerHeight,T=19;
       var cols=Math.max(1,Math.round(w/T)),rows=Math.max(1,Math.round(h/T));
       dots.style.backgroundSize=(w/cols).toFixed(3)+'px '+(h/rows).toFixed(3)+'px';
     }
