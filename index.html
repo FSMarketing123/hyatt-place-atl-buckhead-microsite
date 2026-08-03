@@ -319,12 +319,16 @@
 
   /* ---------- ACCESS GATE (password screen) ---------- */
   body.gated{overflow:hidden}
-  #gate{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;
-        padding:40px 24px;text-align:center;color:#fff;
-        background-color:#021d49;
-        background-image:radial-gradient(rgba(255,255,255,.25) 1.6px,transparent 1.7px);
-        background-size:22px 22px}
+  #gate{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;
+        color:#fff;background-color:#021d49;overflow:hidden}
   #gate.hide{display:none}
+  #gate .gate-dots{position:absolute;inset:0;z-index:0;pointer-events:none;
+                   background-image:radial-gradient(circle,rgba(255,255,255,.15) 1px,transparent 1.4px);
+                   background-repeat:repeat;background-position:center;
+                   -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 100%);
+                   mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,0) 100%)}
+  #gate .gate-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+                    text-align:center;padding:40px 24px;max-width:100%}
   #gate .gate-logo{height:clamp(52px,7vw,66px);width:auto;margin-bottom:clamp(26px,4vw,38px)}
   #gate h1{font-family:var(--font-cormorant);font-weight:300;font-size:clamp(27px,4vw,40px);color:#fff;margin:0;letter-spacing:.01em}
   #gate .gate-rule{width:54px;height:1px;background:var(--gold);margin:20px auto 22px}
@@ -346,21 +350,36 @@
 
 <!-- ================= ACCESS GATE ================= -->
 <div id="gate" role="dialog" aria-modal="true" aria-label="Access required">
-  <img class="gate-logo" src="assets/HWE-logo-white.svg" alt="Hodges Ward Elliott">
-  <h1>Confidential Offering Memorandum</h1>
-  <div class="gate-rule"></div>
-  <p>This offering is password-protected. Please enter the access password provided to you.</p>
-  <form id="gate-form" autocomplete="off">
-    <input id="gate-input" type="password" placeholder="Access password" aria-label="Access password" autocomplete="off" spellcheck="false">
-    <div class="gate-err" id="gate-err">Incorrect password. Please try again.</div>
-    <button type="submit">Enter</button>
-  </form>
-  <div class="gate-foot">Hyatt Place Atlanta Buckhead &middot; Buckhead CBD, Atlanta</div>
+  <div class="gate-dots" aria-hidden="true"></div>
+  <div class="gate-inner">
+    <img class="gate-logo" src="assets/HWE-logo-white.svg" alt="Hodges Ward Elliott">
+    <h1>Confidential Offering Memorandum</h1>
+    <div class="gate-rule"></div>
+    <p>This offering is password-protected. Please enter the access password provided to you.</p>
+    <form id="gate-form" autocomplete="off">
+      <input id="gate-input" type="password" placeholder="Access password" aria-label="Access password" autocomplete="off" spellcheck="false">
+      <div class="gate-err" id="gate-err">Incorrect password. Please try again.</div>
+      <button type="submit">Enter</button>
+    </form>
+    <div class="gate-foot">Hyatt Place Atlanta Buckhead &middot; Buckhead CBD, Atlanta</div>
+  </div>
 </div>
 <script>
   (function(){
     var gate=document.getElementById('gate'),form=document.getElementById('gate-form'),
-        input=document.getElementById('gate-input'),err=document.getElementById('gate-err');
+        input=document.getElementById('gate-input'),err=document.getElementById('gate-err'),
+        dots=gate.querySelector('.gate-dots');
+    // Size the dot grid so an integer number of tiles fits exactly -> no cropped
+    // dots and symmetric (equal) spacing on all edges, at any viewport size.
+    function layoutDots(){
+      if(!dots) return;
+      var w=window.innerWidth,h=window.innerHeight,T=26;
+      var cols=Math.max(1,Math.round(w/T)),rows=Math.max(1,Math.round(h/T));
+      dots.style.backgroundSize=(w/cols).toFixed(3)+'px '+(h/rows).toFixed(3)+'px';
+    }
+    layoutDots();
+    window.addEventListener('resize',layoutDots,{passive:true});
+    window.addEventListener('orientationchange',layoutDots);
     // Access password (hashed — change the password by asking me to regenerate this value)
     var PASS_HASH=5558333819464026;
     function cyrb53(s,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<s.length;i++){ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0);}
