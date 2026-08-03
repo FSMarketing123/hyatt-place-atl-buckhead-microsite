@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hyatt Place Atlanta Buckhead — Offered by Hodges Ward Elliott</title>
+<meta name="description" content="171-key all-suite, premium select-service hotel in the Buckhead CBD — offered free and clear of financing, management, and brand encumbrances by Hodges Ward Elliott." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+  :root{
+    /* Hyatt Place Buckhead palette (sampled from brand theme) */
+    --ink:#f4edd9;        --ink-rgb:244,237,217;   /* cream page bg  */
+    --navy:#ece3ca;       --navy-rgb:236,227,202;  /* deeper cream alt section */
+    --navy-lt:#ffffff;                              /* white cards */
+    --slate:#48606b;      --slate-rgb:72,96,107;   /* slate-blue brand bands */
+    --slate-mid:#3b4f58;  --slate-deep:#2c3b43;    --slate-lt:#5c7883;
+    --blue:#48606b;       --blue-mid:#3b4f58;  --blue-lt:#5c7883;   /* aliases */
+    --red:#b08d57;        --red-lt:#c4a066;        /* gold accent / CTA */
+    --gold:#b08d57;       --gold-soft:rgba(176,141,87,.9);
+    --dark-gray:#6e6a5e;
+    --cream:#2c3b43;      --off-white:#455063;  --muted:#6e6a5e;     /* text on light */
+    --ink-on-slate:#f4edd9;
+    --divider:rgba(176,141,87,.38);
+    --font-cormorant:"Cormorant Garamond",Georgia,serif;
+    --font-poppins:"Poppins",system-ui,sans-serif;
+    --pad:clamp(24px,7vw,100px);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--cream);
+       font-family:var(--font-poppins);font-weight:300;line-height:1.65;font-size:17.3px;
+       -webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  .section{padding:clamp(72px,10vh,128px) var(--pad);position:relative;overflow:hidden}
+  .wrap{max-width:1280px;margin:0 auto;position:relative;z-index:2}
+  .bleed{margin-left:calc(-1*var(--pad));margin-right:calc(-1*var(--pad))}
+
+  h1,h2,h3,h4{font-family:var(--font-cormorant);font-weight:300;margin:0;letter-spacing:.01em}
+  .h2{font-size:clamp(34px,4.6vw,58px);line-height:1.04;color:var(--cream)}
+  .h2.on-slate{color:#fff}
+  .eyebrow{font-family:var(--font-poppins);font-size:11px;font-weight:600;letter-spacing:.34em;
+           text-transform:uppercase;color:var(--gold)}
+  .eyebrow.on-slate{color:var(--red-lt)}
+  .lead{font-size:17.3px;color:var(--muted);line-height:1.85;font-weight:300}
+  .em{font-style:italic;color:var(--slate)}
+  /* gold hairline under eyebrow / heading */
+  .rule{width:54px;height:1px;background:var(--gold);margin:20px 0 26px}
+  .rule.center{margin-left:auto;margin-right:auto}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;font-family:var(--font-poppins);
+       font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+       border-radius:1px;transition:transform .2s,background .2s,color .2s,border-color .2s;cursor:pointer;border:0}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-cta{background:var(--gold);color:#fff}
+  .btn-cta:hover{background:var(--red-lt)}
+  .btn-slate{background:var(--slate);color:#fff}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
+  .btn-ghost:hover{background:#fff;color:var(--slate)}
+  .btn-ghost-gold{background:transparent;color:var(--slate);border:1px solid var(--gold)}
+  .btn-ghost-gold:hover{background:var(--gold);color:#fff}
+
+  /* ---------- NAV (glass; inline links at top → hamburger on scroll) ---------- */
+  .nav{position:fixed;inset:0 0 auto 0;z-index:100;height:74px;display:flex;align-items:center;
+       justify-content:space-between;padding:0 clamp(20px,5vw,72px);
+       background:rgba(28,38,44,.42);backdrop-filter:blur(18px) saturate(130%);
+       -webkit-backdrop-filter:blur(18px) saturate(130%);
+       border-bottom:1px solid rgba(255,255,255,.12);
+       transition:background .35s,height .35s}
+  .nav-logo{display:inline-flex;align-items:center}
+  .nav .logo{height:38px;width:auto;opacity:.5;transition:opacity .3s}
+  .nav-logo:hover .logo{opacity:1}
+
+  /* Inline links (shown at top) */
+  .nav-links{display:flex;gap:clamp(14px,2.1vw,32px);align-items:center}
+  .nav-links a{font-size:clamp(9px,1vw,11px);letter-spacing:.2em;text-transform:uppercase;
+               color:rgba(255,255,255,.82);transition:color .2s;white-space:nowrap}
+  .nav-links a:hover{color:#fff}
+  .nav-links a.navcta{padding:10px 18px;border:1px solid var(--gold);color:#fff;background:var(--gold-soft)}
+  .nav-links a.navcta:hover{background:var(--gold);color:#fff}
+
+  /* Hamburger button (shown when scrolled / on narrow screens) */
+  .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;
+              width:36px;height:36px;padding:0;background:transparent;border:0;cursor:pointer;z-index:2}
+  .nav-toggle span{display:block;width:26px;height:2px;border-radius:2px;background:#fff;
+                   transition:transform .3s ease,opacity .25s ease;transform-origin:center}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-toggle.open span:nth-child(2){opacity:0}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* Dropdown menu (glass panel) */
+  .nav-menu{position:absolute;top:100%;right:clamp(16px,5vw,64px);margin-top:12px;min-width:248px;
+            display:flex;flex-direction:column;gap:2px;padding:14px;
+            background:rgba(28,38,44,.72);backdrop-filter:blur(20px) saturate(130%);
+            -webkit-backdrop-filter:blur(20px) saturate(130%);
+            border:1px solid rgba(255,255,255,.14);border-radius:5px;box-shadow:0 24px 60px rgba(0,0,0,.4);
+            opacity:0;visibility:hidden;transform:translateY(-10px);
+            transition:opacity .28s ease,transform .28s ease,visibility .28s}
+  .nav-menu.open{opacity:1;visibility:visible;transform:translateY(0)}
+  .nav-menu a{padding:13px 16px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+              color:rgba(255,255,255,.85);border-radius:3px;transition:background .2s,color .2s}
+  .nav-menu a:hover{background:rgba(255,255,255,.08);color:#fff}
+  .nav-menu a.menu-cta{margin-top:8px;background:var(--gold);color:#fff;font-weight:600;text-align:center}
+  .nav-menu a.menu-cta:hover{background:var(--red-lt);color:#fff}
+  /* On scroll: the bar disappears — only the logo + hamburger remain, floating */
+  .nav.scrolled{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom-color:transparent}
+  .nav.scrolled .nav-links{display:none}
+  .nav.scrolled .nav-toggle{display:flex}
+  .nav.scrolled .logo{filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+  .nav.scrolled .nav-toggle span{box-shadow:0 1px 5px rgba(0,0,0,.55)}
+  /* Narrow screens: always hamburger */
+  @media(max-width:940px){
+    .nav-links{display:none}
+    .nav-toggle{display:flex}
+  }
+
+  /* Pinned "Access the Offering" tab (left edge) */
+  .pin-cta{position:fixed;left:0;top:50%;z-index:90;
+           writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);
+           background:var(--gold);color:#fff;font-family:var(--font-poppins);font-size:11px;font-weight:600;
+           letter-spacing:.2em;text-transform:uppercase;padding:20px 13px;white-space:nowrap;
+           border-radius:0 4px 4px 0;box-shadow:2px 4px 22px rgba(0,0,0,.28);transition:background .2s,padding .2s}
+  .pin-cta:hover{background:var(--red-lt);padding-left:17px}
+  @media(max-width:600px){.pin-cta{font-size:10px;padding:16px 11px}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;
+        padding:0 var(--pad) clamp(56px,9vh,96px);color:#fff;overflow:hidden}
+  .hero .bg{position:absolute;inset:0;background:url(assets/exterior.jpg) center 38%/cover no-repeat;transform:scale(1.04)}
+  .hero .veil{position:absolute;inset:0;background:
+      linear-gradient(180deg,rgba(24,33,38,.55) 0%,rgba(24,33,38,.12) 34%,rgba(24,33,38,.35) 66%,rgba(24,33,38,.86) 100%)}
+  .hero .arc{position:absolute;right:-14vw;top:-16vw;width:52vw;height:52vw;border-radius:50%;
+             border:1px solid rgba(176,141,87,.55);z-index:1}
+  .hero .arc2{position:absolute;right:-6vw;top:-4vw;width:34vw;height:34vw;border-radius:50%;
+              border:1px solid rgba(255,255,255,.14);z-index:1}
+  .hero-inner{position:relative;z-index:3;max-width:1280px;margin:0 auto;width:100%}
+  .hero h1{font-size:clamp(44px,7.2vw,104px);line-height:.98;font-weight:300;letter-spacing:.005em;
+           max-width:16ch;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+  .hero .sub{font-size:clamp(15px,1.7vw,20px);color:rgba(255,255,255,.9);margin-top:22px;max-width:52ch;font-weight:300}
+  .hero .kv{display:flex;flex-wrap:wrap;gap:0;margin-top:40px;border-top:1px solid rgba(255,255,255,.22);padding-top:26px}
+  .hero .kv .cell{padding-right:clamp(24px,4vw,56px);margin-right:clamp(24px,4vw,56px);
+                  border-right:1px solid rgba(255,255,255,.2)}
+  .hero .kv .cell:last-child{border-right:0;margin-right:0;padding-right:0}
+  .hero .kv .num{font-family:var(--font-cormorant);font-size:clamp(30px,3.4vw,42px);line-height:1;color:#fff}
+  .hero .kv .lab{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-top:8px}
+  .hero .eyebrow{color:var(--red-lt);margin-bottom:20px;display:block}
+  .scrollcue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;
+             width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:translateX(-50%) scaleY(1)}50%{opacity:.35;transform:translateX(-50%) scaleY(.55)}}
+  .hero-logo{position:absolute;top:clamp(104px,15vh,196px);right:clamp(32px,7vw,120px);z-index:3;
+             height:clamp(150px,19vw,250px);width:auto;filter:drop-shadow(0 4px 18px rgba(0,0,0,.5))}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  /* ---------- OVERVIEW ---------- */
+  .overview{background:var(--ink)}
+  .ov-btns{display:inline-flex;flex-direction:column;align-items:stretch;gap:14px;margin-top:32px}
+  .ov-btns .btn{justify-content:center;text-align:center}
+  .ov-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,80px);align-items:center}
+  .ov-visual{position:relative;display:flex;align-items:center;justify-content:center;
+             min-height:clamp(320px,40vw,520px)}
+  .ov-ring{position:absolute;width:clamp(300px,42vw,540px);aspect-ratio:1;border-radius:50%;
+           border:1px solid var(--gold);opacity:.55;transform:translate(-7%,-6%);z-index:1;pointer-events:none}
+  .ov-badge{position:relative;z-index:2;width:clamp(280px,38vw,460px);aspect-ratio:1;border-radius:50%;
+            background:radial-gradient(circle at 32% 30%,var(--slate-lt),var(--slate) 60%,var(--slate-mid));
+            color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+            padding:clamp(24px,3.4vw,44px);box-shadow:0 34px 70px -24px rgba(44,59,67,.55)}
+  .ov-badge .big{font-family:var(--font-cormorant);font-size:clamp(66px,8vw,116px);line-height:.9}
+  .ov-badge .cap{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--red-lt);margin-top:8px}
+  .ov-badge .divide{width:64px;height:1px;background:rgba(255,255,255,.4);margin:clamp(18px,2.4vw,28px) auto}
+  .ov-badge .mini{display:flex;justify-content:center;gap:clamp(20px,2.6vw,34px);flex-wrap:nowrap}
+  .ov-badge .mini div .m-n{font-family:var(--font-cormorant);font-size:clamp(22px,2.4vw,28px)}
+  .ov-badge .mini div .m-l{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:4px;white-space:nowrap}
+  @media(max-width:860px){
+    .ov-grid{grid-template-columns:1fr}
+    .ov-visual{min-height:0;margin-top:8px}
+  }
+
+  /* ---------- SNAPSHOT ---------- */
+  .snap{background:var(--navy)}
+  .snap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--divider);
+             border:1px solid var(--divider);margin-top:44px}
+  .snap-grid .item{background:var(--navy);padding:26px clamp(20px,2.4vw,30px);position:relative;
+                   transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s,background .3s}
+  .snap-grid .item:hover{transform:scale(1.09);z-index:4;background:#fff;
+                         box-shadow:0 18px 44px rgba(44,59,67,.24)}
+  .snap-grid .k{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .snap-grid .v{font-family:var(--font-cormorant);font-size:clamp(20px,2vw,26px);color:var(--slate);margin-top:9px;line-height:1.15}
+  .snap-grid .v small{font-family:var(--font-poppins);font-size:13px;color:var(--muted);display:block;margin-top:6px;font-weight:300;letter-spacing:.02em}
+  @media(max-width:860px){.snap-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.snap-grid{grid-template-columns:1fr}}
+
+  /* ---------- GALLERY ---------- */
+  .gal{background:var(--ink)}
+  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(150px,17vw,230px);gap:12px;margin-top:44px}
+  .gal-grid figure{margin:0;position:relative;overflow:hidden;background:var(--slate)}
+  .gal-grid img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+  .gal-grid figure:hover img{transform:scale(1.06)}
+  .gal-grid figcaption{position:absolute;left:0;bottom:0;right:0;padding:14px 16px;color:#fff;
+      font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+      background:linear-gradient(transparent,rgba(28,38,44,.82));opacity:0;transition:opacity .3s}
+  .gal-grid figure:hover figcaption{opacity:1}
+  .span2{grid-column:span 2}.row2{grid-row:span 2}
+  @media(max-width:860px){.gal-grid{grid-template-columns:repeat(2,1fr)}.span2{grid-column:span 2}.row2{grid-row:span 1}}
+
+  /* ---------- HIGHLIGHTS (each its own section) ---------- */
+  .hl{padding:clamp(58px,8.5vh,108px) var(--pad);position:relative}
+  .hl.slate{background:var(--slate);color:#fff}
+  .hl.cream{background:var(--ink)}
+  .hl-intro{max-width:1180px;margin:0 auto clamp(30px,5vw,56px)}
+  .hl-item{max-width:1180px;margin:0 auto}
+  .hl-title{font-family:var(--font-cormorant);font-weight:300;font-size:clamp(22px,2.5vw,33px);line-height:1.12;margin:0 0 20px}
+  @media(min-width:941px){ .hl:not(.hl-hero) .hl-title{white-space:nowrap} }
+  .hl.slate .hl-title{color:#fff}
+  .hl.cream .hl-title{color:var(--cream)}
+  .hl-body{font-size:clamp(16.3px,1.2vw,17.8px);line-height:1.85;font-weight:300;max-width:64ch;margin:0}
+  .hl.slate .hl-body{color:rgba(244,237,217,.82)}
+  .hl.cream .hl-body{color:var(--muted)}
+  .hl-body + .hl-body{margin-top:1.05em}
+  #highlights .hl-body{max-width:none}   /* Highlight #1 body spans full width */
+  .hl-eyebrow{display:block;font-family:var(--font-poppins);font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;margin-bottom:14px}
+  .hl.cream .hl-eyebrow{color:var(--gold)}
+  .hl.slate .hl-eyebrow{color:var(--red-lt)}
+
+  /* Highlight #1 — decorative parallax circles behind the copy */
+  #highlights{overflow:hidden}
+  #highlights > .hl-intro,#highlights > .hl-item,#highlights > .hl-one-media,#highlights > .hl-one-hint{position:relative;z-index:2}
+  .hl-ring,.hl-orb{position:absolute;border-radius:50%;pointer-events:none;z-index:0;will-change:transform}
+  .hl-ring{width:min(80vw,920px);aspect-ratio:1;border:1px solid rgba(168,208,228,.5);
+           top:clamp(-340px,-15vw,-150px);left:2%}
+  .hl-orb{width:min(48vw,580px);aspect-ratio:1;
+          background:radial-gradient(circle at 42% 36%,#2c3e54,#1e2d44 72%);
+          top:clamp(24px,5vw,90px);right:clamp(-150px,-6vw,-60px)}
+
+  /* Highlight #1 — copy on top, aerial image on its own below (click to zoom/pan) */
+  .hl-one-media{margin:clamp(34px,5vw,58px) calc(-1*var(--pad)) 0;position:relative;overflow:hidden;
+                background:#1c262c;cursor:zoom-in}
+  .hl-one-media img{width:100%;height:auto;display:block;transform-origin:center center;
+                    transition:transform .5s cubic-bezier(.4,0,.2,1);will-change:transform;user-select:none}
+  .hl-one-media.zoomed{cursor:zoom-out}
+  .hl-one-media.zoomed img{transform:scale(2.4)}
+  .hl-one-hint{max-width:1180px;margin:14px auto 0;display:flex;align-items:center;gap:9px;
+               font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,217,.6)}
+  .hl-one-hint::before{content:"";width:26px;height:1px;background:var(--gold)}
+
+  /* ---------- LOCATION ---------- */
+  .loc{background:var(--ink)}
+  .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,72px);align-items:start;margin-top:20px}
+  .callouts{list-style:none;padding:0;margin:28px 0 0}
+  .callouts li{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--divider);align-items:baseline}
+  .callouts li:last-child{border-bottom:0}
+  .callouts .dist{font-family:var(--font-cormorant);font-size:22px;color:var(--slate);min-width:96px;line-height:1}
+  .callouts .desc{font-size:15.8px;color:var(--muted);line-height:1.55}
+  .callouts .desc b{color:var(--cream);font-weight:500}
+  #demand-map{width:100%;height:100%;min-height:440px;border:1px solid var(--divider);background:#e8e2d2}
+  .map-wrap{display:flex;flex-direction:column;gap:14px}
+  .map-legend{font-size:11px;color:var(--muted);letter-spacing:.02em}
+  .gen-list{display:flex;flex-wrap:wrap;gap:8px}
+  .gen-chip{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);
+            border:1px solid var(--divider);padding:7px 12px;cursor:pointer;transition:.2s;background:#fff}
+  .gen-chip:hover{background:var(--slate);color:#fff;border-color:var(--slate)}
+  @media(max-width:860px){.loc-grid{grid-template-columns:1fr}}
+
+  /* ---------- MARKET (custom maps) ---------- */
+  .market{background:var(--navy)}
+  .market-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,2.6vw,34px);margin-top:46px}
+  .map-card{background:#fff;border:1px solid var(--divider);display:flex;flex-direction:column}
+  .map-card .head{display:flex;align-items:center;justify-content:space-between;gap:14px;
+                  padding:18px 22px;background:var(--slate);color:#fff}
+  .map-card .head .t{font-family:var(--font-cormorant);font-size:22px;line-height:1.1}
+  .map-card .head .t small{display:block;font-family:var(--font-poppins);font-size:10px;font-weight:500;
+                           letter-spacing:.2em;text-transform:uppercase;color:var(--red-lt);margin-top:5px}
+  .map-card .head .open{flex:none;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+                        color:#fff;border:1px solid rgba(255,255,255,.5);padding:8px 12px;white-space:nowrap;transition:.2s}
+  .map-card .head .open:hover{background:var(--gold);border-color:var(--gold)}
+  .map-frame{position:relative;width:100%;height:440px;background:#e8e2d2}
+  .map-frame>div{position:absolute;inset:0;width:100%;height:100%}
+  .map-chips{padding:16px 22px 4px;max-height:150px;overflow-y:auto}
+  .map-note{padding:14px 22px;font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--divider)}
+  .map-note .legkey{display:inline-block;margin-left:8px;white-space:nowrap;color:var(--slate);font-weight:500}
+  .map-note .legstar{color:var(--gold)}
+  @media(max-width:860px){.market-grid{grid-template-columns:1fr}.map-frame{height:380px}}
+
+  /* ---------- CTA BAND ---------- */
+  .cta{background:var(--slate-deep);text-align:center;position:relative}
+  .cta .arc{position:absolute;left:50%;top:-24vw;transform:translateX(-50%);width:60vw;height:60vw;
+            border-radius:50%;border:1px solid rgba(176,141,87,.28)}
+  .cta h2{color:#fff}
+  .cta p{color:rgba(244,237,217,.8);max-width:56ch;margin:18px auto 0;font-size:15.5px;line-height:1.8}
+  .cta .btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:38px}
+
+  /* ---------- FOOTER ---------- */
+  .foot{background:var(--slate-deep);color:#fff;padding:clamp(56px,7vh,88px) var(--pad) 46px;border-top:1px solid rgba(176,141,87,.3)}
+  .foot .wrap{max-width:1280px;margin:0 auto}
+  .foot .logo{height:40px;margin-bottom:34px}
+  .foot h4{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-lt);font-family:var(--font-poppins);font-weight:600;margin-bottom:22px}
+  .contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
+  .contacts .c .nm{font-family:var(--font-cormorant);font-size:22px;color:#fff}
+  .contacts .c .ti{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(244,237,217,.62);margin:5px 0 9px}
+  .contacts .c a{font-size:13px;color:var(--red-lt);word-break:break-word}
+  .contacts .c a:hover{color:#fff}
+  .foot .hwe{margin-top:52px;padding-top:26px;border-top:1px solid rgba(255,255,255,.12);
+             display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .foot .hwe .brand{font-family:var(--font-cormorant);font-size:20px;letter-spacing:.04em;color:#fff}
+  .foot .disc{font-size:11px;color:rgba(244,237,217,.5);line-height:1.7;max-width:64ch;margin-top:22px}
+  @media(max-width:860px){.contacts{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.contacts{grid-template-columns:1fr}}
+
+  .flag{color:#b08d57;font-style:italic}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#top"><img class="logo" src="assets/HWE-logo-white.svg" alt="Hodges Ward Elliott"></a>
+  <div class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#snapshot">Property</a>
+    <a href="#highlights">Highlights</a>
+    <a href="#location">Location</a>
+    <a href="#market">Market</a>
+    <a href="#gallery">Gallery</a>
+    <a class="navcta" href="#access">Offering Memorandum</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-menu" id="navMenu">
+    <a href="#overview">Overview</a>
+    <a href="#snapshot">Property</a>
+    <a href="#highlights">Highlights</a>
+    <a href="#location">Location</a>
+    <a href="#market">Market</a>
+    <a href="#gallery">Gallery</a>
+    <a class="menu-cta" href="#access">Offering Memorandum</a>
+  </div>
+</nav>
+
+<!-- Pinned CTA (left edge) -->
+<a class="pin-cta" href="#access">Access the Offering</a>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="bg"></div>
+  <div class="arc"></div>
+  <div class="arc2"></div>
+  <div class="veil"></div>
+  <img class="hero-logo" src="assets/hp-stack-color-white.svg" alt="Hyatt Place Atlanta Buckhead">
+  <h1 class="sr-only">Hyatt Place Atlanta Buckhead — Offered by Hodges Ward Elliott</h1>
+  <div class="scrollcue"></div>
+</header>
+
+<!-- ================= OVERVIEW ================= -->
+<section class="section overview" id="overview">
+  <div class="wrap">
+    <div class="ov-grid">
+      <div>
+        <span class="eyebrow">The Offering</span>
+        <div class="rule"></div>
+        <h2 class="h2">Investment Overview</h2>
+        <p class="lead" style="margin-top:26px">Hodges Ward Elliott, as exclusive agent for the Seller, is pleased to present for your consideration the 171-key <span class="em">Hyatt Place Atlanta Buckhead</span>, an all-suite, premium select-service hotel to be delivered free and clear of financing, management, and brand encumbrances. The Hotel is located in the heart of the Buckhead CBD, one of the Southeast's premier mixed-use destinations.</p>
+        <div class="ov-btns">
+          <a href="#access" class="btn btn-cta">Sign Confidentiality Agreement</a>
+          <a href="#access" class="btn btn-ghost-gold">Download Confidentiality Agreement</a>
+        </div>
+      </div>
+      <div class="ov-visual">
+        <div class="ov-ring"></div>
+        <div class="ov-badge">
+          <div class="big">171</div>
+          <div class="cap">All-Suite Keys</div>
+          <div class="divide"></div>
+          <div class="mini">
+            <div><div class="m-n">1997</div><div class="m-l">Year Built</div></div>
+            <div><div class="m-n">88,434</div><div class="m-l">Gross SF</div></div>
+            <div><div class="m-n">0.78</div><div class="m-l">Acres</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SNAPSHOT ================= -->
+<section class="section snap" id="snapshot">
+  <div class="wrap">
+    <span class="eyebrow">Property Snapshot</span>
+    <div class="rule"></div>
+    <h2 class="h2">Building attributes &amp; amenities</h2>
+    <div class="snap-grid">
+      <div class="item"><div class="k">Keys</div><div class="v">171</div></div>
+      <div class="item"><div class="k">Stories</div><div class="v">8</div></div>
+      <div class="item"><div class="k">Year Built</div><div class="v">1997</div></div>
+      <div class="item"><div class="k">Ownership Interest</div><div class="v">Fee-Simple</div></div>
+      <div class="item"><div class="k">Construction</div><div class="v">Steel &amp; Concrete<small class="flag">Confirm in diligence</small></div></div>
+      <div class="item"><div class="k">Meeting Space</div><div class="v">1,600 SF<small>Two divisible meeting rooms</small></div></div>
+      <div class="item"><div class="k">Gross Building Area</div><div class="v">88,434 SF<small>Per CoStar</small></div></div>
+      <div class="item"><div class="k">Site Area</div><div class="v">0.78 Acres<small>Per CoStar</small></div></div>
+      <div class="item"><div class="k">Zoning</div><div class="v">C-3<small>Per CoStar</small></div></div>
+      <div class="item"><div class="k">Parking</div><div class="v">Self-Park<small>$18 / night · count to confirm</small></div></div>
+      <div class="item"><div class="k">Alternative-Use Potential</div><div class="v" style="font-size:19px">Multifamily · Senior Living · Affordable Housing</div></div>
+      <div class="item"><div class="k">Amenities</div><div class="v" style="font-size:18px">Outdoor pool · Fitness center · Complimentary breakfast · The Placery lobby bar · Business center · Market</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="section gal" id="gallery">
+  <div class="wrap">
+    <span class="eyebrow">Look Around the Property</span>
+    <div class="rule"></div>
+    <h2 class="h2">An established all-suite product, ready to reposition</h2>
+    <div class="gal-grid bleed">
+      <figure class="span2 row2"><img src="assets/lobby.jpg" alt="Lobby seating"><figcaption>Lobby &amp; Living Area</figcaption></figure>
+      <figure><img src="assets/placery.jpg" alt="The Placery lobby bar"><figcaption>The Placery — Lobby Bar</figcaption></figure>
+      <figure><img src="assets/suite.jpg" alt="Suite living area"><figcaption>All-Suite Living Area</figcaption></figure>
+      <figure><img src="assets/king.jpg" alt="King guestroom"><figcaption>King Guestroom</figcaption></figure>
+      <figure><img src="assets/market.jpg" alt="The Market"><figcaption>The Market</figcaption></figure>
+      <figure><img src="assets/pool.jpg" alt="Outdoor pool"><figcaption>Outdoor Pool</figcaption></figure>
+      <figure><img src="assets/fitness.jpg" alt="Fitness center"><figcaption>24-Hour Fitness Center</figcaption></figure>
+      <figure class="span2"><img src="assets/meeting.jpg" alt="Meeting space"><figcaption>Divisible Meeting Space</figcaption></figure>
+      <figure><img src="assets/double.jpg" alt="Double queen guestroom"><figcaption>Double Queen Suite</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INVESTMENT HIGHLIGHTS (separate sections) ================= -->
+<section class="hl slate" id="highlights">
+  <div class="hl-ring" aria-hidden="true"></div>
+  <div class="hl-orb" aria-hidden="true"></div>
+  <div class="hl-intro">
+    <div class="rule"></div>
+    <h2 class="h2 on-slate">Investment Highlights</h2>
+  </div>
+  <div class="hl-item">
+    <span class="hl-eyebrow">Investment Highlights #1</span>
+    <h3 class="hl-title">Rare Blank-Slate, Fee-Simple Opportunity in the Buckhead CBD</h3>
+    <p class="hl-body">After 30 years of operation under Hyatt Place and its predecessor brand, with Hyatt serving as manager throughout, the Hotel is now available for acquisition free and clear of existing brand and management encumbrances for the first time. The existing ground lease will terminate, allowing the Property to be delivered fee-simple and without financing encumbrances.</p>
+    <p class="hl-body">This rare blank-slate opportunity allows a purchaser to implement a comprehensive renovation, select a new brand, and establish its preferred operating strategy. The Property’s size, infill location, and existing amenity package support a range of premium select-service positioning strategies, subject to brand availability and conversion requirements.</p>
+  </div>
+  <div class="hl-one-media" id="aerialZoom">
+    <img src="assets/aerial-buckhead.jpg" alt="Aerial view of Buckhead with the Hyatt Place Atlanta Buckhead highlighted">
+  </div>
+  <div class="hl-one-hint">Click image to zoom &amp; pan · click to reset</div>
+</section>
+
+<section class="hl cream">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #2</span>
+      <h3 class="hl-title">Ideal Position Within Buckhead Place at Peachtree &amp; Piedmont</h3>
+      <p class="hl-body">The Property is located within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads, surrounded by more than 14.0 million square feet of Class A office space, 2.3 million square feet of super-regional retail at Lenox Square and Phipps Plaza, thousands of luxury residential units, and a deep concentration of corporate headquarters. Guests are within immediate walking distance of restaurants, retail, fitness, and everyday conveniences, including a new Chick-fil-A that opened directly adjacent to the Property in May 2025.</p>
+      <p class="hl-body">The surrounding area has also benefited from significant reinvestment, including the comprehensive redevelopment and re-tenanting of nearby Buckhead Landing around a new Publix. The growing concentration of dining and retail options has materially improved walkability and supports the Property’s ability to capture higher-rated corporate and leisure demand following renovation. Additionally, MARTA’s Buckhead station is a five-minute walk from the Property, providing direct access to Midtown, Downtown Atlanta, Hartsfield-Jackson Atlanta International Airport, and many of the city’s largest employment centers and entertainment venues.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hl slate">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #3</span>
+      <h3 class="hl-title">Redevelopment Opportunity</h3>
+      <p class="hl-body">The Property’s infill location, existing structure, and position within Buckhead Place provide conversion optionality beyond continued hotel use. New ownership may evaluate residential, senior-living, or other alternative-use strategies that capitalize on the surrounding concentration of retail, dining, healthcare, and employment. The Property’s existing room configuration, common areas, amenity package, and parking access also provide a foundation for a future conversion.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hl cream">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #4</span>
+      <h3 class="hl-title">Renovation Upside at an All-In Basis Below Replacement Cost</h3>
+      <p class="hl-body">The Hotel requires a comprehensive renovation, providing new ownership with an opportunity to materially improve RevPAR performance. The anticipated all-in basis, including acquisition and renovation costs, is expected to remain well below replacement cost. This basis provides meaningful downside protection while preserving substantial upside through renovation, rebranding, and operational improvement.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hl slate">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #5</span>
+      <h3 class="hl-title">No New Hotel Supply</h3>
+      <p class="hl-body">Beginning in 2021, five hotels opened in the historically high-barrier-to-entry Buckhead submarket, increasing inventory by approximately 15%. Following this recent supply wave, there are no hotels under construction or planned in the Buckhead CBD, a true rarity among urban Sunbelt submarkets.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hl cream">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #6</span>
+      <h3 class="hl-title">Improving Office and Lodging Market Momentum in Buckhead</h3>
+      <p class="hl-body">Buckhead’s premier office assets continue to attract major tenants and investment. Within one mile of the Property, Weinberg Wheeler expanded at 3344 Peachtree, Rayonier selected Terminus 100 for its new headquarters, Greenberg Traurig renewed at Terminus 200, and SouthState Bank established a major presence at Prominence Tower. Also less than one mile from the Property, CP Group’s redevelopment of Piedmont Center is enhancing amenities and attracting popular restaurants and retail tenants. These commitments reflect employers’ and investors’ continued preference for well-located, highly amenitized office buildings in the Buckhead CBD.</p>
+      <p class="hl-body">Buckhead lodging performance has also improved, with RevPAR increasing 2.9% on a trailing-12-month basis through June 2026. The combination of strengthening hotel performance and renewed office activity provides a favorable backdrop for the Property’s renovation and repositioning.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hl slate">
+  <div class="hl-item">
+    <div>
+      <span class="hl-eyebrow">Investment Highlights #7</span>
+      <h3 class="hl-title">Major Future Demand Catalysts</h3>
+      <p class="hl-body">Atlanta will host Super Bowl LXII at Mercedes-Benz Stadium in 2028 and the NCAA Men’s Final Four in 2031. These major events will add to Atlanta’s recurring calendar of professional sports, college football, conventions, and entertainment, supporting citywide lodging demand.</p>
+      <p class="hl-body">The Property’s proximity to MARTA allows guests to travel directly from Buckhead to Downtown Atlanta, where Mercedes-Benz Stadium and many of the market’s largest event venues are located.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOCATION ================= -->
+<section class="section loc" id="location">
+  <div class="wrap">
+    <span class="eyebrow">Location</span>
+    <div class="rule"></div>
+    <h2 class="h2">At the crossroads of Peachtree &amp; Piedmont</h2>
+    <div class="loc-grid">
+      <div>
+        <p class="lead">The Property sits within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads — walkable to super-regional retail, Class A office, and everyday conveniences, with direct MARTA access to Midtown, Downtown, and Hartsfield-Jackson International Airport.</p>
+        <ul class="callouts">
+          <li><span class="dist">5 min</span><span class="desc">Walk to <b>MARTA Buckhead Station</b> — direct rail to Midtown, Downtown &amp; the airport</span></li>
+          <li><span class="dist">Adjacent</span><span class="desc">New <b>Chick-fil-A</b> opened directly adjacent to the Property in May 2025</span></li>
+          <li><span class="dist">2.3M SF</span><span class="desc">Super-regional retail at <b>Lenox Square</b> &amp; <b>Phipps Plaza</b></span></li>
+          <li><span class="dist">14.0M SF</span><span class="desc">Class A office within the <b>Buckhead CBD</b>, anchored by corporate HQs</span></li>
+          <li><span class="dist">Nearby</span><span class="desc"><b>Buckhead Landing</b> redeveloped around a new <b>Publix</b>, boosting walkability</span></li>
+        </ul>
+      </div>
+      <div class="map-wrap">
+        <div id="demand-map"></div>
+        <div class="gen-list" id="gen-list"></div>
+        <div class="map-legend">Map markers are illustrative of key demand drivers surrounding the Property. Click a driver to locate it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARKET / CUSTOM MAPS ================= -->
+<section class="section market" id="market">
+  <div class="wrap">
+    <span class="eyebrow">Market Context</span>
+    <div class="rule"></div>
+    <h2 class="h2">A deep, growing corporate demand base</h2>
+    <p class="lead" style="max-width:60ch;margin-top:20px">The Buckhead CBD is anchored by more than 14.0 million square feet of Class A office and one of the Southeast's densest concentrations of corporate headquarters — the demand engine behind the Property's repositioning thesis.</p>
+    <div class="market-grid">
+      <div class="map-card">
+        <div class="head">
+          <div class="t">Buckhead Office Market<small>Class A Office Core · 31 Major Tenants</small></div>
+        </div>
+        <div class="map-frame"><div id="office-map"></div></div>
+        <div class="gen-list map-chips" id="office-list"></div>
+        <div class="map-note">Major office tenants immediately surrounding the Property — the Terminus and Peachtree-corridor assets driving corporate demand. Click a tenant to locate it. <span class="legkey"><span class="legstar">★</span> Subject Hotel</span></div>
+      </div>
+      <div class="map-card">
+        <div class="head">
+          <div class="t">Atlanta's Fortune 1000<small>Corporate Headquarters · 29 Companies</small></div>
+        </div>
+        <div class="map-frame"><div id="fortune-map"></div></div>
+        <div class="gen-list map-chips" id="fortune-list"></div>
+        <div class="map-note">The metro's Fortune 1000 headquarters, underscoring the corporate travel base that supports Buckhead lodging demand. Click a company to locate it. <span class="legkey"><span class="legstar">★</span> Subject Hotel</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA / ACCESS ================= -->
+<section class="section cta" id="access">
+  <div class="arc"></div>
+  <div class="wrap">
+    <span class="eyebrow on-slate">Confidential Offering</span>
+    <div class="rule center"></div>
+    <h2 class="h2 on-slate">Access the Offering Memorandum</h2>
+    <p>Execute the Confidentiality Agreement to receive the full Offering Memorandum, financial model, and due-diligence materials for Hyatt Place Atlanta Buckhead.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-cta">Sign the CA Online</a>
+      <a href="#" class="btn btn-ghost">Download the CA</a>
+    </div>
+    <p style="font-size:11px;color:rgba(244,237,217,.45);margin-top:24px" class="flag">CA links are placeholders — replace with the RightSignature / DocuSign and DOCX URLs.</p>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="foot" id="contact">
+  <div class="wrap">
+    <img class="logo" src="assets/HWE-logo-white.svg" alt="Hodges Ward Elliott">
+    <h4>Exclusive Representatives</h4>
+    <div class="contacts">
+      <div class="c">
+        <div class="nm">Clint Hodges</div>
+        <div class="ti">Managing Director</div>
+        <a href="mailto:chodges@hodgeswardelliott.com">chodges@hodgeswardelliott.com</a>
+      </div>
+      <div class="c">
+        <div class="nm">Nate Ries</div>
+        <div class="ti">Senior Director</div>
+        <a href="mailto:nries@hodgeswardelliott.com">nries@hodgeswardelliott.com</a>
+      </div>
+      <div class="c">
+        <div class="nm">Kevin Felmley</div>
+        <div class="ti">Analyst</div>
+        <a href="mailto:kfelmley@hodgeswardelliott.com">kfelmley@hodgeswardelliott.com</a>
+      </div>
+      <div class="c">
+        <div class="nm">Michael Britvan</div>
+        <div class="ti">Managing Director · Acquisition Financing Advisor</div>
+        <a href="mailto:mbritvan@hodgeswardelliott.com">mbritvan@hodgeswardelliott.com</a>
+      </div>
+    </div>
+    <div class="hwe">
+      <div class="brand">Hodges Ward Elliott</div>
+      <a href="#access" class="btn btn-cta">Access the Offering</a>
+    </div>
+    <p class="disc">This microsite is intended solely for informational purposes and does not constitute an offer to sell or a solicitation of an offer to buy any security or interest. Certain property data is sourced from CoStar and other third parties and is subject to confirmation in diligence. All information should be independently verified. &copy; 2026 Hodges Ward Elliott.</p>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Glass nav: inline links at top; collapse into hamburger dropdown once scrolled
+  var nav=document.getElementById('nav');
+  var navToggle=document.getElementById('navToggle');
+  var navMenu=document.getElementById('navMenu');
+  function closeMenu(){ navMenu.classList.remove('open'); navToggle.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); }
+  navToggle.addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=navMenu.classList.toggle('open');
+    navToggle.classList.toggle('open',open);
+    navToggle.setAttribute('aria-expanded',open?'true':'false');
+  });
+  navMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); });
+  document.addEventListener('click',function(e){ if(!nav.contains(e.target)) closeMenu(); });
+  function onScroll(){ if(window.scrollY>60){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); closeMenu(); } }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  // Highlight #1: parallax the two decorative circles as the section scrolls
+  (function(){
+    var sec=document.getElementById('highlights');
+    if(!sec) return;
+    var ring=sec.querySelector('.hl-ring'), orb=sec.querySelector('.hl-orb');
+    if(!ring||!orb) return;
+    var ticking=false;
+    function update(){
+      var r=sec.getBoundingClientRect();
+      var offset=(window.innerHeight/2)-(r.top+r.height*0.28);
+      ring.style.transform='translate3d(0,'+(offset*-0.14).toFixed(1)+'px,0)';
+      orb.style.transform='translate3d(0,'+(offset*0.10).toFixed(1)+'px,0)';
+      ticking=false;
+    }
+    function onScroll(){ if(!ticking){requestAnimationFrame(update);ticking=true;} }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll);
+    update();
+  })();
+
+  // Highlight #1 aerial: click to zoom into that point + pan on move, click to reset
+  (function(){
+    var wrap=document.getElementById('aerialZoom');
+    if(!wrap) return;
+    var img=wrap.querySelector('img');
+    function setOrigin(e){
+      var r=wrap.getBoundingClientRect();
+      var x=Math.max(0,Math.min(100,((e.clientX-r.left)/r.width)*100));
+      var y=Math.max(0,Math.min(100,((e.clientY-r.top)/r.height)*100));
+      img.style.transformOrigin=x+'% '+y+'%';
+    }
+    wrap.addEventListener('click',function(e){
+      if(wrap.classList.contains('zoomed')){
+        wrap.classList.remove('zoomed');
+        img.style.transformOrigin='center center';
+      } else {
+        setOrigin(e);
+        wrap.classList.add('zoomed');
+      }
+    });
+    wrap.addEventListener('mousemove',function(e){ if(wrap.classList.contains('zoomed')) setOrigin(e); });
+  })();
+
+  /* ---- Shared map helpers (OpenStreetMap via CARTO Positron tiles) ---- */
+  var HOTEL={name:'Hyatt Place Atlanta Buckhead',lat:33.8449,lng:-84.3669};
+  var TILE_URL='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  var TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+  function starIcon(){
+    return L.divIcon({className:'',iconSize:[36,36],iconAnchor:[18,18],
+      html:'<div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;">'
+        +'<svg width="32" height="32" viewBox="0 0 24 24" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.45))">'
+        +'<path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 7.1-1.01L12 2z" '
+        +'fill="#b08d57" stroke="#ffffff" stroke-width="1.3" stroke-linejoin="round"/></svg></div>'});
+  }
+  function numIcon(n,bg){
+    bg=bg||'#48606b';
+    return L.divIcon({className:'',iconSize:[22,22],iconAnchor:[11,11],
+      html:'<div style="width:22px;height:22px;border-radius:50%;background:'+bg+';border:2px solid #fff;color:#fff;'
+        +'font:600 11px/1 Poppins,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;'
+        +'box-shadow:0 1px 3px rgba(0,0,0,.35)">'+n+'</div>'});
+  }
+  function fallback(el){el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.color='#6e6a5e';el.textContent='Buckhead CBD · Atlanta, GA';}
+
+  // Build a themed Leaflet map: numbered markers + hotel star. Returns {map,markers}.
+  function buildMap(elId,points,opts){
+    opts=opts||{};
+    var el=document.getElementById(elId);
+    if(!el) return null;
+    if(typeof L==='undefined'){ fallback(el); return null; }
+    var map=L.map(el,{scrollWheelZoom:false});
+    L.tileLayer(TILE_URL,{maxZoom:19,attribution:TILE_ATTR}).addTo(map);
+    var markers=points.map(function(p,i){
+      return L.marker([p.lat,p.lng],{icon:numIcon(i+1,opts.color)}).addTo(map)
+        .bindPopup('<b>'+(i+1)+'. '+p.name+'</b>'+(p.note?'<br>'+p.note:''));
+    });
+    var star=L.marker([HOTEL.lat,HOTEL.lng],{icon:starIcon(),zIndexOffset:1000}).addTo(map)
+      .bindPopup('<b>'+HOTEL.name+'</b><br>Subject Property');
+    var group=L.featureGroup(markers.concat([star]));
+    map.fitBounds(group.getBounds().pad(opts.pad||0.15));
+    return {map:map,markers:markers};
+  }
+
+  // Demand generators (Location section)
+  var GENERATORS=[
+    {name:'Lenox Square',lat:33.8465,lng:-84.3620,note:'Super-regional retail'},
+    {name:'Phipps Plaza',lat:33.8520,lng:-84.3617,note:'Luxury retail & Nobu'},
+    {name:'MARTA Buckhead Station',lat:33.8479,lng:-84.3670,note:'5-min walk · direct rail'},
+    {name:'Terminus / Class A Office',lat:33.8505,lng:-84.3658,note:'14.0M+ SF office core'},
+    {name:'Chick-fil-A (adjacent)',lat:33.8452,lng:-84.3682,note:'Opened May 2025'},
+    {name:'Mercedes-Benz Stadium',lat:33.7554,lng:-84.4009,note:'Super Bowl LXII · 2028'},
+    {name:'Hartsfield-Jackson ATL',lat:33.6407,lng:-84.4277,note:'World’s busiest airport'}
+  ];
+
+  // Buckhead office market (data from public map, plotted natively on OpenStreetMap)
+  var OFFICE=[
+    {name:'Morgan Stanley Private Wealth',lat:33.84433,lng:-84.37109},
+    {name:'Wells Fargo Private Bank',lat:33.84445,lng:-84.37097},
+    {name:'Amazon',lat:33.84602,lng:-84.37193},
+    {name:'WeWork',lat:33.84451,lng:-84.37129},
+    {name:'Stephens Inc.',lat:33.84676,lng:-84.36854},
+    {name:'PulteGroup',lat:33.84763,lng:-84.36811},
+    {name:'Taft (formerly Morris, Manning & Martin, LLP)',lat:33.84685,lng:-84.36687},
+    {name:'Novelis',lat:33.85399,lng:-84.36283},
+    {name:'Global Payments Inc',lat:33.85218,lng:-84.36723},
+    {name:'Aon',lat:33.85099,lng:-84.36614},
+    {name:'BBDO Atlanta',lat:33.85208,lng:-84.36628},
+    {name:'SAP America Inc.',lat:33.85171,lng:-84.36607},
+    {name:'Baker Donelson',lat:33.85011,lng:-84.36409},
+    {name:'JPMorgan Chase & Co',lat:33.85182,lng:-84.36432},
+    {name:'Goldman Sachs & Co',lat:33.85379,lng:-84.36299},
+    {name:"Carter's",lat:33.84645,lng:-84.37442},
+    {name:'UBS',lat:33.85118,lng:-84.36631},
+    {name:'Merrill Lynch Wealth Management',lat:33.85019,lng:-84.3602},
+    {name:'PGIM',lat:33.8483,lng:-84.36848},
+    {name:'Cousins Properties',lat:33.85015,lng:-84.36117},
+    {name:'Truist Wealth Management',lat:33.8549,lng:-84.35837},
+    {name:'State Street',lat:33.85201,lng:-84.36752},
+    {name:'Barnes & Thornburg LLP',lat:33.84656,lng:-84.36856},
+    {name:'JLL',lat:33.84731,lng:-84.36869},
+    {name:'Fifth Third Private Bank',lat:33.84719,lng:-84.36839},
+    {name:'Barclays Investment Bank',lat:33.84709,lng:-84.36862},
+    {name:'Greenberg Traurig, LLP',lat:33.84598,lng:-84.37176},
+    {name:'SouthState Bank',lat:33.84992,lng:-84.3752},
+    {name:'Salesforce',lat:33.84691,lng:-84.35722},
+    {name:'Weinberg Wheeler Hudgins Gunn & Dial',lat:33.84719,lng:-84.36864},
+    {name:'Buchalter',lat:33.84997,lng:-84.37505}
+  ];
+
+  // Atlanta Fortune 1000 headquarters
+  var FORTUNE=[
+    {name:'The Home Depot',lat:33.84887,lng:-84.43223},
+    {name:'UPS',lat:33.94377,lng:-84.35991},
+    {name:'One Coca-Cola Plaza',lat:33.77115,lng:-84.39727},
+    {name:'Delta',lat:33.65621,lng:-84.42382},
+    {name:'Southern Company',lat:33.76432,lng:-84.38829},
+    {name:'Genuine Parts Company',lat:33.91082,lng:-84.45609},
+    {name:'PulteGroup',lat:33.84763,lng:-84.36811},
+    {name:'Norfolk Southern',lat:33.77312,lng:-84.38778},
+    {name:'Newell Brands',lat:33.91703,lng:-84.35457},
+    {name:'Intercontinental Exchange',lat:33.91021,lng:-84.43061},
+    {name:'Global Payments',lat:33.85099,lng:-84.36614},
+    {name:'Graphic Packaging International',lat:33.91071,lng:-84.43623},
+    {name:'NCR Atleos',lat:33.77926,lng:-84.38952},
+    {name:'Equifax',lat:33.79665,lng:-84.38849},
+    {name:'BlueLinx',lat:33.90571,lng:-84.46747},
+    {name:"Carter's",lat:33.85273,lng:-84.36394},
+    {name:'Acuity',lat:33.78643,lng:-84.38372},
+    {name:'Floor & Decor',lat:33.90496,lng:-84.45656},
+    {name:'Corpay, Inc.',lat:33.84451,lng:-84.37129},
+    {name:'Americold Logistics',lat:33.93574,lng:-84.3621},
+    {name:'Rollins',lat:33.81616,lng:-84.36718},
+    {name:'Gray Media',lat:33.87143,lng:-84.33388},
+    {name:'Beazer Homes',lat:33.9341,lng:-84.35453},
+    {name:'Asbury Automotive Group',lat:34.00514,lng:-84.09347},
+    {name:'Assurant',lat:33.89964,lng:-84.46349},
+    {name:'AGCO Corporation',lat:34.01736,lng:-84.16437},
+    {name:'SiteOne Landscape Supply',lat:34.04384,lng:-84.32517},
+    {name:'Saia, Inc.',lat:34.0593,lng:-84.16683},
+    {name:'Primerica',lat:33.98587,lng:-84.09774}
+  ];
+
+  // Populate a clickable numbered legend and wire it to a map
+  function buildChips(listId,points,mapObj,zoom){
+    var list=document.getElementById(listId);
+    if(!list) return;
+    points.forEach(function(p,i){
+      var c=document.createElement('span');c.className='gen-chip';c.textContent=(i+1)+'. '+p.name;
+      c.setAttribute('data-i',i);list.appendChild(c);
+    });
+    if(mapObj){
+      list.querySelectorAll('.gen-chip').forEach(function(chip){
+        chip.addEventListener('click',function(){
+          var i=+chip.getAttribute('data-i');
+          mapObj.map.flyTo([points[i].lat,points[i].lng],zoom||15);
+          mapObj.markers[i].openPopup();
+        });
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    // Location demand map + clickable legend
+    var demand=buildMap('demand-map',GENERATORS,{color:'#48606b',pad:0.18});
+    buildChips('gen-list',GENERATORS,demand,14);
+
+    // Market Context maps + matching clickable legends
+    var office=buildMap('office-map',OFFICE,{color:'#48606b',pad:0.12});
+    buildChips('office-list',OFFICE,office,16);
+    var fortune=buildMap('fortune-map',FORTUNE,{color:'#3b4f58',pad:0.10});
+    buildChips('fortune-list',FORTUNE,fortune,13);
+  });
+</script>
+</body>
+</html>
