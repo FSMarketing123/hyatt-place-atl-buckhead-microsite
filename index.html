@@ -403,7 +403,6 @@
     <a href="#overview">Overview</a>
     <a href="#snapshot">Property</a>
     <a href="#highlights">Highlights</a>
-    <a href="#location">Location</a>
     <a href="#market">Market</a>
     <a href="#gallery">Gallery</a>
     <a class="navcta" href="#access">Offering Memorandum</a>
@@ -415,7 +414,6 @@
     <a href="#overview">Overview</a>
     <a href="#snapshot">Property</a>
     <a href="#highlights">Highlights</a>
-    <a href="#location">Location</a>
     <a href="#market">Market</a>
     <a href="#gallery">Gallery</a>
     <a class="menu-cta" href="#access">Offering Memorandum</a>
@@ -589,32 +587,6 @@
       <h3 class="hl-title">Major Future Demand Catalysts</h3>
       <p class="hl-body">Atlanta will host Super Bowl LXII at Mercedes-Benz Stadium in 2028 and the NCAA Men’s Final Four in 2031. These major events will add to Atlanta’s recurring calendar of professional sports, college football, conventions, and entertainment, supporting citywide lodging demand.</p>
       <p class="hl-body">The Property’s proximity to MARTA allows guests to travel directly from Buckhead to Downtown Atlanta, where Mercedes-Benz Stadium and many of the market’s largest event venues are located.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ================= LOCATION ================= -->
-<section class="section loc" id="location">
-  <div class="wrap">
-    <span class="eyebrow">Location</span>
-    <div class="rule"></div>
-    <h2 class="h2">At the crossroads of Peachtree &amp; Piedmont</h2>
-    <div class="loc-grid">
-      <div>
-        <p class="lead">The Property sits within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads — walkable to super-regional retail, Class A office, and everyday conveniences, with direct MARTA access to Midtown, Downtown, and Hartsfield-Jackson International Airport.</p>
-        <ul class="callouts">
-          <li><span class="dist">5 min</span><span class="desc">Walk to <b>MARTA Buckhead Station</b> — direct rail to Midtown, Downtown &amp; the airport</span></li>
-          <li><span class="dist">Adjacent</span><span class="desc">New <b>Chick-fil-A</b> opened directly adjacent to the Property in May 2025</span></li>
-          <li><span class="dist">2.3M SF</span><span class="desc">Super-regional retail at <b>Lenox Square</b> &amp; <b>Phipps Plaza</b></span></li>
-          <li><span class="dist">14.0M SF</span><span class="desc">Class A office within the <b>Buckhead CBD</b>, anchored by corporate HQs</span></li>
-          <li><span class="dist">Nearby</span><span class="desc"><b>Buckhead Landing</b> redeveloped around a new <b>Publix</b>, boosting walkability</span></li>
-        </ul>
-      </div>
-      <div class="map-wrap">
-        <div id="demand-map"></div>
-        <div class="gen-list" id="gen-list"></div>
-        <div class="map-legend">Map markers are illustrative of key demand drivers surrounding the Property. Click a driver to locate it.</div>
-      </div>
     </div>
   </div>
 </section>
@@ -800,17 +772,6 @@
     return {map:map,markers:markers};
   }
 
-  // Demand generators (Location section)
-  var GENERATORS=[
-    {name:'Lenox Square',lat:33.8465,lng:-84.3620,note:'Super-regional retail'},
-    {name:'Phipps Plaza',lat:33.8520,lng:-84.3617,note:'Luxury retail & Nobu'},
-    {name:'MARTA Buckhead Station',lat:33.8479,lng:-84.3670,note:'5-min walk · direct rail'},
-    {name:'Terminus / Class A Office',lat:33.8505,lng:-84.3658,note:'14.0M+ SF office core'},
-    {name:'Chick-fil-A (adjacent)',lat:33.8452,lng:-84.3682,note:'Opened May 2025'},
-    {name:'Mercedes-Benz Stadium',lat:33.7554,lng:-84.4009,note:'Super Bowl LXII · 2028'},
-    {name:'Hartsfield-Jackson ATL',lat:33.6407,lng:-84.4277,note:'World’s busiest airport'}
-  ];
-
   // Buckhead office market (data from public map, plotted natively on OpenStreetMap)
   var OFFICE=[
     {name:'Morgan Stanley Private Wealth',lat:33.84433,lng:-84.37109},
@@ -899,10 +860,6 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    // Location demand map + clickable legend
-    var demand=buildMap('demand-map',GENERATORS,{color:'#48606b',pad:0.18});
-    buildChips('gen-list',GENERATORS,demand,14);
-
     // Market Context maps + matching clickable legends
     var office=buildMap('office-map',OFFICE,{color:'#48606b',pad:0.12});
     buildChips('office-list',OFFICE,office,16);
