@@ -283,6 +283,10 @@
   .hl-split-media figure{margin:0;overflow:hidden;aspect-ratio:16/10;background:#1c262c}
   .hl-split-media img{width:100%;height:100%;object-fit:cover;display:block}
   .hl:not(.hl-hero) .hl-split .hl-title{white-space:normal;max-width:none}
+  .hl-split-copy{align-self:start}
+  /* Full-width image below the copy (Highlight #5) */
+  .hl-wide{margin:clamp(30px,4vw,50px) calc(-1*var(--pad)) 0}
+  .hl-wide img{width:100%;height:auto;display:block}
   @media(max-width:760px){
     .hl-duo{grid-template-columns:1fr}
     .hl-split{grid-template-columns:1fr;gap:26px}
@@ -591,7 +595,9 @@
     <div>
       <span class="hl-eyebrow">Investment Highlights #3</span>
       <h3 class="hl-title">Redevelopment Opportunity</h3>
-      <p class="hl-body">The Property’s infill location, existing structure, and position within Buckhead Place provide conversion optionality beyond continued hotel use. New ownership may evaluate residential, senior-living, or other alternative-use strategies that capitalize on the surrounding concentration of retail, dining, healthcare, and employment. The Property’s existing room configuration, common areas, amenity package, and parking access also provide a foundation for a future conversion.</p>
+      <div class="hl-cols">
+        <p class="hl-body">The Property’s infill location, existing structure, and position within Buckhead Place provide conversion optionality beyond continued hotel use. New ownership may evaluate residential, senior-living, or other alternative-use strategies that capitalize on the surrounding concentration of retail, dining, healthcare, and employment. The Property’s existing room configuration, common areas, amenity package, and parking access also provide a foundation for a future conversion.</p>
+      </div>
     </div>
   </div>
   <div class="hl-duo">
@@ -615,12 +621,18 @@
 </section>
 
 <section class="hl slate">
-  <div class="hl-item">
-    <div>
+  <div class="hl-split">
+    <div class="hl-split-copy">
       <span class="hl-eyebrow">Investment Highlights #5</span>
       <h3 class="hl-title">No New Hotel Supply</h3>
       <p class="hl-body">Beginning in 2021, five hotels opened in the historically high-barrier-to-entry Buckhead submarket, increasing inventory by approximately 15%. Following this recent supply wave, there are no hotels under construction or planned in the Buckhead CBD, a true rarity among urban Sunbelt submarkets.</p>
     </div>
+    <div class="hl-split-media">
+      <figure><img src="assets/aerial-131.jpg" alt="Aerial view of Buckhead"></figure>
+    </div>
+  </div>
+  <div class="hl-wide">
+    <img src="assets/exterior-004.jpg" alt="Exterior of the Property by day">
   </div>
 </section>
 
