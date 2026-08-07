@@ -273,6 +273,20 @@
   .hl-cols{margin-top:6px}
   .hl-cols .hl-body{max-width:none}
   .hl-cols .hl-body + .hl-body{margin-top:1.05em}
+  /* Two-image row (Highlight #3) */
+  .hl-duo{max-width:1180px;margin:clamp(34px,5vw,56px) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.5vw,20px)}
+  .hl-duo figure{margin:0;overflow:hidden;aspect-ratio:3/2;background:#1c262c}
+  .hl-duo img{width:100%;height:100%;object-fit:cover;display:block}
+  /* Split layout: images left, copy right (Highlight #4) */
+  .hl-split{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .hl-split-media{display:flex;flex-direction:column;gap:clamp(12px,1.5vw,18px)}
+  .hl-split-media figure{margin:0;overflow:hidden;aspect-ratio:16/10;background:#1c262c}
+  .hl-split-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .hl:not(.hl-hero) .hl-split .hl-title{white-space:normal;max-width:none}
+  @media(max-width:760px){
+    .hl-duo{grid-template-columns:1fr}
+    .hl-split{grid-template-columns:1fr;gap:26px}
+  }
 
   /* ---------- LOCATION ---------- */
   .loc{background:var(--ink)}
@@ -580,11 +594,19 @@
       <p class="hl-body">The Property’s infill location, existing structure, and position within Buckhead Place provide conversion optionality beyond continued hotel use. New ownership may evaluate residential, senior-living, or other alternative-use strategies that capitalize on the surrounding concentration of retail, dining, healthcare, and employment. The Property’s existing room configuration, common areas, amenity package, and parking access also provide a foundation for a future conversion.</p>
     </div>
   </div>
+  <div class="hl-duo">
+    <figure><img src="assets/chopper-175.jpg" alt="Aerial view of the Property"></figure>
+    <figure><img src="assets/kingsuite-103.jpg" alt="King suite"></figure>
+  </div>
 </section>
 
 <section class="hl cream">
-  <div class="hl-item">
-    <div>
+  <div class="hl-split">
+    <div class="hl-split-media">
+      <figure><img src="assets/doublesuite-118.jpg" alt="Double queen suite"></figure>
+      <figure><img src="assets/doublesuite-116.jpg" alt="Double queen suite"></figure>
+    </div>
+    <div class="hl-split-copy">
       <span class="hl-eyebrow">Investment Highlights #4</span>
       <h3 class="hl-title">Renovation Upside at an All-In Basis Below Replacement Cost</h3>
       <p class="hl-body">The Hotel requires a comprehensive renovation, providing new ownership with an opportunity to materially improve RevPAR performance. The anticipated all-in basis, including acquisition and renovation costs, is expected to remain well below replacement cost. This basis provides meaningful downside protection while preserving substantial upside through renovation, rebranding, and operational improvement.</p>
