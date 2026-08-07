@@ -269,11 +269,10 @@
                font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,217,.6)}
   .hl-one-hint::before{content:"";width:26px;height:1px;background:var(--gold)}
   .hl.cream .hl-one-hint{color:var(--muted)}
-  /* Two-column body copy (spans full width) */
-  .hl-cols{column-count:2;column-gap:clamp(32px,4vw,64px);margin-top:6px}
-  .hl-cols .hl-body{max-width:none;break-inside:avoid}
-  .hl-cols .hl-body + .hl-body{margin-top:0}
-  @media(max-width:760px){.hl-cols{column-count:1} .hl-cols .hl-body + .hl-body{margin-top:1.05em}}
+  /* Body copy spans the full width (single block, not split) */
+  .hl-cols{margin-top:6px}
+  .hl-cols .hl-body{max-width:none}
+  .hl-cols .hl-body + .hl-body{margin-top:1.05em}
 
   /* ---------- LOCATION ---------- */
   .loc{background:var(--ink)}
