@@ -269,6 +269,11 @@
                font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,217,.6)}
   .hl-one-hint::before{content:"";width:26px;height:1px;background:var(--gold)}
   .hl.cream .hl-one-hint{color:var(--muted)}
+  /* Two-column body copy (spans full width) */
+  .hl-cols{column-count:2;column-gap:clamp(32px,4vw,64px);margin-top:6px}
+  .hl-cols .hl-body{max-width:none;break-inside:avoid}
+  .hl-cols .hl-body + .hl-body{margin-top:0}
+  @media(max-width:760px){.hl-cols{column-count:1} .hl-cols .hl-body + .hl-body{margin-top:1.05em}}
 
   /* ---------- LOCATION ---------- */
   .loc{background:var(--ink)}
@@ -554,8 +559,10 @@
     <div>
       <span class="hl-eyebrow">Investment Highlights #2</span>
       <h3 class="hl-title">Ideal Position Within Buckhead Place at Peachtree &amp; Piedmont</h3>
-      <p class="hl-body">The Property is located within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads, surrounded by more than 14.0 million square feet of Class A office space, 2.3 million square feet of super-regional retail at Lenox Square and Phipps Plaza, thousands of luxury residential units, and a deep concentration of corporate headquarters. Guests are within immediate walking distance of restaurants, retail, fitness, and everyday conveniences, including a new Chick-fil-A that opened directly adjacent to the Property in May 2025.</p>
-      <p class="hl-body">The surrounding area has also benefited from significant reinvestment, including the comprehensive redevelopment and re-tenanting of nearby Buckhead Landing around a new Publix. The growing concentration of dining and retail options has materially improved walkability and supports the Property’s ability to capture higher-rated corporate and leisure demand following renovation. Additionally, MARTA’s Buckhead station is a five-minute walk from the Property, providing direct access to Midtown, Downtown Atlanta, Hartsfield-Jackson Atlanta International Airport, and many of the city’s largest employment centers and entertainment venues.</p>
+      <div class="hl-cols">
+        <p class="hl-body">The Property is located within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads, surrounded by more than 14.0 million square feet of Class A office space, 2.3 million square feet of super-regional retail at Lenox Square and Phipps Plaza, thousands of luxury residential units, and a deep concentration of corporate headquarters. Guests are within immediate walking distance of restaurants, retail, fitness, and everyday conveniences, including a new Chick-fil-A that opened directly adjacent to the Property in May 2025.</p>
+        <p class="hl-body">The surrounding area has also benefited from significant reinvestment, including the comprehensive redevelopment and re-tenanting of nearby Buckhead Landing around a new Publix. The growing concentration of dining and retail options has materially improved walkability and supports the Property’s ability to capture higher-rated corporate and leisure demand following renovation. Additionally, MARTA’s Buckhead station is a five-minute walk from the Property, providing direct access to Midtown, Downtown Atlanta, Hartsfield-Jackson Atlanta International Airport, and many of the city’s largest employment centers and entertainment venues.</p>
+      </div>
     </div>
   </div>
   <div class="hl-one-media" id="aerialZoom2">
