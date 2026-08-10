@@ -12,7 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <!-- Map -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <style>
   :root{
@@ -46,7 +45,7 @@
   .bleed{margin-left:calc(-1*var(--pad));margin-right:calc(-1*var(--pad))}
 
   h1,h2,h3,h4{font-family:var(--font-cormorant);font-weight:300;margin:0;letter-spacing:.01em}
-  .h2{font-size:clamp(34px,4.6vw,58px);line-height:1.04;color:var(--cream)}
+  .h2{font-size:clamp(34px,4.6vw,58px);line-height:1.04;color:var(--cream);text-transform:capitalize}
   .h2.on-slate{color:#fff}
   .eyebrow{font-family:var(--font-poppins);font-size:11px;font-weight:600;letter-spacing:.34em;
            text-transform:uppercase;color:var(--gold)}
@@ -281,6 +280,7 @@
   .hl-split{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
   .hl-split-media{display:flex;flex-direction:column;gap:clamp(12px,1.5vw,18px)}
   .hl-split-media figure{margin:0;overflow:hidden;aspect-ratio:16/10;background:#1c262c}
+  .hl-split-media.tall figure{aspect-ratio:10/7}
   .hl-split-media img{width:100%;height:100%;object-fit:cover;display:block}
   .hl:not(.hl-hero) .hl-split .hl-title{white-space:normal;max-width:none}
   .hl-split-copy{align-self:start}
@@ -294,6 +294,39 @@
   .hl-collage img{width:100%;height:100%;object-fit:cover;display:block}
   .hl-collage .marta-badge{position:absolute;top:14px;left:14px;line-height:0}
   .hl-collage .marta-badge img{width:auto;height:clamp(38px,4.4vw,56px);display:block;filter:drop-shadow(0 3px 10px rgba(0,0,0,.3))}
+  /* Hover parallax on highlight images */
+  .hl-wide{overflow:hidden}
+  .hl-duo img,.hl-split-media img,.hl-collage figure img,.hl-wide img,.hl-quad .ph img,.hl-copy-img img{transition:transform .25s ease-out;will-change:transform}
+  /* Image below the copy within a split column (Highlight #4) */
+  .hl-copy-img{margin-top:clamp(24px,3vw,36px);overflow:hidden}
+  .hl-copy-img img{width:100%;height:auto;display:block}
+  /* Four-image row of tenant buildings (Highlight #6) */
+  .hl-quad{max-width:1180px;margin:clamp(34px,5vw,56px) auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,18px)}
+  .hl-quad figure{margin:0}
+  .hl-quad .ph{overflow:hidden;aspect-ratio:3/4;background:#1c262c}
+  .hl-quad .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .hl-quad figcaption{margin-top:10px;font-size:11px;letter-spacing:.06em;color:var(--muted);line-height:1.45}
+  .hl-quad figcaption b{display:block;color:var(--cream);font-weight:500;font-size:12.5px;letter-spacing:.01em}
+  @media(max-width:760px){.hl-quad{grid-template-columns:1fr 1fr}}
+  /* Logo overlay on tenant images */
+  .ph{position:relative;overflow:hidden}
+  .hl-split-media .ph{aspect-ratio:4/5}
+  .hl-split-media .cp-fig{overflow:visible;aspect-ratio:auto;background:none}
+  .hl-split-media .cp-fig figcaption{margin-top:10px;font-size:12px;letter-spacing:.06em;color:var(--muted);line-height:1.45}
+  .logo-ov{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:12%;
+           background:radial-gradient(ellipse at center,rgba(15,22,27,.55) 0%,rgba(15,22,27,.18) 78%);pointer-events:none}
+  .ph .logo-ov img{max-width:82%;max-height:42%;width:auto;height:auto;object-fit:contain;
+                   filter:drop-shadow(0 2px 10px rgba(0,0,0,.55))}
+  /* CP logo variant: small, top-right, no scrim */
+  .logo-ov.corner{align-items:flex-start;justify-content:flex-end;padding:6%;background:none}
+  .ph .logo-ov.corner img{max-width:34%;max-height:20%}
+  /* Hover blurb popout */
+  .ph .blurb{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:16px 16px 15px;
+             background:linear-gradient(transparent,rgba(15,22,27,.95));color:rgba(255,255,255,.94);
+             font-size:12px;line-height:1.5;opacity:0;transform:translateY(10px);
+             transition:opacity .3s ease,transform .3s ease;pointer-events:none}
+  .hl-split-media .ph .blurb{font-size:13.5px;padding:22px 22px 20px}
+  .ph:hover .blurb{opacity:1;transform:translateY(0)}
   @media(max-width:760px){
     .hl-duo{grid-template-columns:1fr}
     .hl-split{grid-template-columns:1fr;gap:26px}
@@ -450,7 +483,6 @@
     <a href="#overview">Overview</a>
     <a href="#snapshot">Property</a>
     <a href="#highlights">Highlights</a>
-    <a href="#market">Market</a>
     <a href="#gallery">Gallery</a>
     <a class="navcta" href="#access">Offering Memorandum</a>
   </div>
@@ -461,7 +493,6 @@
     <a href="#overview">Overview</a>
     <a href="#snapshot">Property</a>
     <a href="#highlights">Highlights</a>
-    <a href="#market">Market</a>
     <a href="#gallery">Gallery</a>
     <a class="menu-cta" href="#access">Offering Memorandum</a>
   </div>
@@ -526,14 +557,14 @@
       <div class="item"><div class="k">Stories</div><div class="v">8</div></div>
       <div class="item"><div class="k">Year Built</div><div class="v">1997</div></div>
       <div class="item"><div class="k">Ownership Interest</div><div class="v">Fee-Simple</div></div>
-      <div class="item"><div class="k">Construction</div><div class="v">Steel &amp; Concrete<small class="flag">Confirm in diligence</small></div></div>
-      <div class="item"><div class="k">Meeting Space</div><div class="v">1,600 SF<small>Two divisible meeting rooms</small></div></div>
-      <div class="item"><div class="k">Gross Building Area</div><div class="v">88,434 SF<small>Per CoStar</small></div></div>
-      <div class="item"><div class="k">Site Area</div><div class="v">0.78 Acres<small>Per CoStar</small></div></div>
-      <div class="item"><div class="k">Zoning</div><div class="v">C-3<small>Per CoStar</small></div></div>
-      <div class="item"><div class="k">Parking</div><div class="v">Self-Park<small>$18 / night · count to confirm</small></div></div>
-      <div class="item"><div class="k">Alternative-Use Potential</div><div class="v" style="font-size:19px">Multifamily, affordable housing, senior living, etc.</div></div>
-      <div class="item"><div class="k">Amenities</div><div class="v" style="font-size:18px">Outdoor pool · Fitness center · Complimentary breakfast · The Placery lobby bar · Business center · Market</div></div>
+      <div class="item"><div class="k">Construction</div><div class="v">Steel &amp; Concrete</div></div>
+      <div class="item"><div class="k">Meeting Space</div><div class="v">1,600 SF</div></div>
+      <div class="item"><div class="k">Gross Building Area</div><div class="v">88,434 SF</div></div>
+      <div class="item"><div class="k">Site Area</div><div class="v">0.78 Acres</div></div>
+      <div class="item"><div class="k">Zoning</div><div class="v">C-3</div></div>
+      <div class="item"><div class="k">Parking</div><div class="v">Self-Park<small>$18 / night</small></div></div>
+      <div class="item"><div class="k">Alternative-Use Potential</div><div class="v" style="font-size:19px;text-transform:capitalize">Multifamily, affordable housing, senior living, etc.</div></div>
+      <div class="item"><div class="k">Amenities</div><div class="v" style="font-size:18px;text-transform:capitalize">Outdoor pool · Fitness center · Complimentary breakfast · The Placery lobby bar · Business center · Market</div></div>
     </div>
   </div>
 </section>
@@ -569,13 +600,13 @@
     <h2 class="h2 on-slate">Investment Highlights</h2>
   </div>
   <div class="hl-item">
-    <span class="hl-eyebrow">Investment Highlights #1</span>
+    <span class="hl-eyebrow">Investment Highlight - 01 / 07</span>
     <h3 class="hl-title">Rare Blank-Slate, Fee-Simple Opportunity in the Buckhead CBD</h3>
     <p class="hl-body">After 30 years of operation under Hyatt Place and its predecessor brand, with Hyatt serving as manager throughout, the Hotel is now available for acquisition free and clear of existing brand and management encumbrances for the first time. The existing ground lease will terminate, allowing the Property to be delivered fee-simple and without financing encumbrances.</p>
     <p class="hl-body">This rare blank-slate opportunity allows a purchaser to implement a comprehensive renovation, select a new brand, and establish its preferred operating strategy. The Property’s size, infill location, and existing amenity package support a range of premium select-service positioning strategies, subject to brand availability and conversion requirements.</p>
   </div>
   <div class="hl-one-media" id="aerialZoom">
-    <img src="assets/aerial-buckhead.jpg" alt="Aerial view of Buckhead with the Hyatt Place Atlanta Buckhead highlighted">
+    <img src="assets/aerial-marked-02.jpg" alt="Aerial of Buckhead Place with the Property, Buckhead Landing, and key tenants marked">
   </div>
   <div class="hl-one-hint">Click image to zoom &amp; pan · click to reset</div>
 </section>
@@ -583,16 +614,16 @@
 <section class="hl cream">
   <div class="hl-item">
     <div>
-      <span class="hl-eyebrow">Investment Highlights #2</span>
+      <span class="hl-eyebrow">Investment Highlight - 02 / 07</span>
       <h3 class="hl-title">Ideal Position Within Buckhead Place at Peachtree &amp; Piedmont</h3>
       <div class="hl-cols">
-        <p class="hl-body">The Property is located within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads, surrounded by more than 14.0 million square feet of Class A office space, 2.3 million square feet of super-regional retail at Lenox Square and Phipps Plaza, thousands of luxury residential units, and a deep concentration of corporate headquarters. Guests are within immediate walking distance of restaurants, retail, fitness, and everyday conveniences, including a new Chick-fil-A that opened directly adjacent to the Property in May 2025.</p>
+        <p class="hl-body">The Property is located within Buckhead Place at the high-profile intersection of Peachtree and Piedmont Roads, surrounded by 17.8M SF of Class A office space, 2.3 million square feet of super-regional retail at Lenox Square and Phipps Plaza, thousands of luxury residential units, and a deep concentration of corporate headquarters. Guests are within immediate walking distance of restaurants, retail, fitness, and everyday conveniences, including a new Chick-fil-A that opened directly adjacent to the Property in May 2025.</p>
         <p class="hl-body">The surrounding area has also benefited from significant reinvestment, including the comprehensive redevelopment and re-tenanting of nearby Buckhead Landing around a new Publix. The growing concentration of dining and retail options has materially improved walkability and supports the Property’s ability to capture higher-rated corporate and leisure demand following renovation. Additionally, MARTA’s Buckhead station is a five-minute walk from the Property, providing direct access to Midtown, Downtown Atlanta, Hartsfield-Jackson Atlanta International Airport, and many of the city’s largest employment centers and entertainment venues.</p>
       </div>
     </div>
   </div>
   <div class="hl-one-media" id="aerialZoom2">
-    <img src="assets/aerial-marked-02.jpg" alt="Aerial of Buckhead Place with the Property, Buckhead Landing, and key tenants marked">
+    <img src="assets/aerial-171-marked.jpg" alt="Aerial view of Buckhead with the Hyatt Place Atlanta Buckhead highlighted">
   </div>
   <div class="hl-one-hint">Click image to zoom &amp; pan · click to reset</div>
 </section>
@@ -600,7 +631,7 @@
 <section class="hl slate">
   <div class="hl-item">
     <div>
-      <span class="hl-eyebrow">Investment Highlights #3</span>
+      <span class="hl-eyebrow">Investment Highlight - 03 / 07</span>
       <h3 class="hl-title">Redevelopment Opportunity</h3>
       <div class="hl-cols">
         <p class="hl-body">The Property’s infill location, existing structure, and position within Buckhead Place provide conversion optionality beyond continued hotel use. New ownership may evaluate residential, senior-living, or other alternative-use strategies that capitalize on the surrounding concentration of retail, dining, healthcare, and employment. The Property’s existing room configuration, common areas, amenity package, and parking access also provide a foundation for a future conversion.</p>
@@ -615,14 +646,15 @@
 
 <section class="hl cream">
   <div class="hl-split">
-    <div class="hl-split-media">
-      <figure><img src="assets/doublesuite-118.jpg" alt="Double queen suite"></figure>
-      <figure><img src="assets/doublesuite-116.jpg" alt="Double queen suite"></figure>
-    </div>
     <div class="hl-split-copy">
-      <span class="hl-eyebrow">Investment Highlights #4</span>
+      <span class="hl-eyebrow">Investment Highlight - 04 / 07</span>
       <h3 class="hl-title">Renovation Upside at an All-In Basis Below Replacement Cost</h3>
       <p class="hl-body">The Hotel requires a comprehensive renovation, providing new ownership with an opportunity to materially improve RevPAR performance. The anticipated all-in basis, including acquisition and renovation costs, is expected to remain well below replacement cost. This basis provides meaningful downside protection while preserving substantial upside through renovation, rebranding, and operational improvement.</p>
+      <div class="hl-copy-img"><img src="assets/kingsuite-105.jpg" alt="King suite"></div>
+    </div>
+    <div class="hl-split-media tall">
+      <figure><img src="assets/doublesuite-118.jpg" alt="Double queen suite"></figure>
+      <figure><img src="assets/doublesuite-116.jpg" alt="Double queen suite"></figure>
     </div>
   </div>
 </section>
@@ -630,7 +662,7 @@
 <section class="hl slate">
   <div class="hl-split">
     <div class="hl-split-copy">
-      <span class="hl-eyebrow">Investment Highlights #5</span>
+      <span class="hl-eyebrow">Investment Highlight - 05 / 07</span>
       <h3 class="hl-title">No New Hotel Supply</h3>
       <p class="hl-body">Beginning in 2021, five hotels opened in the historically high-barrier-to-entry Buckhead submarket, increasing inventory by approximately 15%. Following this recent supply wave, there are no hotels under construction or planned in the Buckhead CBD, a true rarity among urban Sunbelt submarkets.</p>
     </div>
@@ -644,20 +676,29 @@
 </section>
 
 <section class="hl cream">
-  <div class="hl-item">
-    <div>
-      <span class="hl-eyebrow">Investment Highlights #6</span>
+  <div class="hl-split">
+    <div class="hl-split-copy">
+      <span class="hl-eyebrow">Investment Highlight - 06 / 07</span>
       <h3 class="hl-title">Improving Office and Lodging Market Momentum in Buckhead</h3>
       <p class="hl-body">Buckhead’s premier office assets continue to attract major tenants and investment. Within one mile of the Property, Weinberg Wheeler expanded at 3344 Peachtree, Rayonier selected Terminus 100 for its new headquarters, Greenberg Traurig renewed at Terminus 200, and SouthState Bank established a major presence at Prominence Tower. Also less than one mile from the Property, CP Group’s redevelopment of Piedmont Center is enhancing amenities and attracting popular restaurants and retail tenants. These commitments reflect employers’ and investors’ continued preference for well-located, highly amenitized office buildings in the Buckhead CBD.</p>
       <p class="hl-body">Buckhead lodging performance has also improved, with RevPAR increasing 2.9% on a trailing-12-month basis through June 2026. The combination of strengthening hotel performance and renewed office activity provides a favorable backdrop for the Property’s renovation and repositioning.</p>
     </div>
+    <div class="hl-split-media">
+      <figure class="cp-fig"><div class="ph"><img src="assets/cp-piedmont.jpg" alt="CP Group — Piedmont Center redevelopment"><span class="logo-ov corner"><img src="assets/logo-cp.svg" alt="CP Group"></span><span class="blurb">Atlanta-based commercial real estate owner-operator; its redevelopment of nearby Piedmont Center is adding amenities, dining, and retail.</span></div><figcaption>Redevelopment of Piedmont Center</figcaption></figure>
+    </div>
+  </div>
+  <div class="hl-quad">
+    <figure><div class="ph"><img src="assets/ww-3344.jpg" alt="Weinberg Wheeler at 3344 Peachtree"><span class="logo-ov"><img src="assets/logo-ww.svg" alt="Weinberg Wheeler"></span><span class="blurb">National litigation firm that expanded its Buckhead office at 3344 Peachtree.</span></div><figcaption>3344 Peachtree</figcaption></figure>
+    <figure><div class="ph"><img src="assets/rayonier-t100.jpg" alt="Rayonier at Terminus 100"><span class="logo-ov"><img src="assets/logo-rayonier.svg" alt="Rayonier"></span><span class="blurb">Timberland real estate investment trust that chose Terminus 100 for its headquarters.</span></div><figcaption>Terminus 100</figcaption></figure>
+    <figure><div class="ph"><img src="assets/gt-t200.jpg" alt="Greenberg Traurig at Terminus 200"><span class="logo-ov"><img src="assets/logo-gt.svg" alt="Greenberg Traurig"></span><span class="blurb">Global law firm that renewed its Buckhead office at Terminus 200.</span></div><figcaption>Terminus 200</figcaption></figure>
+    <figure><div class="ph"><img src="assets/southstate-prom.jpg" alt="SouthState Bank at Prominence Tower"><span class="logo-ov"><img src="assets/logo-southstate.svg" alt="SouthState Bank"></span><span class="blurb">Regional bank that established a major presence at Prominence Tower.</span></div><figcaption>Prominence Tower</figcaption></figure>
   </div>
 </section>
 
 <section class="hl slate">
   <div class="hl-split">
     <div class="hl-split-copy">
-      <span class="hl-eyebrow">Investment Highlights #7</span>
+      <span class="hl-eyebrow">Investment Highlight - 07 / 07</span>
       <h3 class="hl-title">Major Future Demand Catalysts</h3>
       <p class="hl-body">Atlanta will host Super Bowl LXII at Mercedes-Benz Stadium in 2028 and the NCAA Men’s Final Four in 2031. These major events will add to Atlanta’s recurring calendar of professional sports, college football, conventions, and entertainment, supporting citywide lodging demand.</p>
       <p class="hl-body">The Property’s proximity to MARTA allows guests to travel directly from Buckhead to Downtown Atlanta, where Mercedes-Benz Stadium and many of the market’s largest event venues are located.</p>
@@ -669,34 +710,6 @@
         <img src="assets/marta-station.jpg" alt="MARTA Buckhead Station">
         <span class="marta-badge"><img src="assets/marta-logo.svg" alt="MARTA"></span>
       </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ================= MARKET / CUSTOM MAPS ================= -->
-<section class="section market" id="market">
-  <div class="wrap">
-    <span class="eyebrow">Market Context</span>
-    <div class="rule"></div>
-    <h2 class="h2">A deep, growing corporate demand base</h2>
-    <p class="lead" style="max-width:60ch;margin-top:20px">The Buckhead CBD is anchored by more than 14.0 million square feet of Class A office and one of the Southeast's densest concentrations of corporate headquarters — the demand engine behind the Property's repositioning thesis.</p>
-    <div class="market-grid">
-      <div class="map-card">
-        <div class="head">
-          <div class="t">Buckhead Office Market<small>Class A Office Core · 31 Major Tenants</small></div>
-        </div>
-        <div class="map-frame"><div id="office-map"></div></div>
-        <div class="gen-list map-chips" id="office-list"></div>
-        <div class="map-note">Major office tenants immediately surrounding the Property — the Terminus and Peachtree-corridor assets driving corporate demand. Click a tenant to locate it. <span class="legkey"><span class="legstar">★</span> Subject Hotel</span></div>
-      </div>
-      <div class="map-card">
-        <div class="head">
-          <div class="t">Atlanta's Fortune 1000<small>Corporate Headquarters · 29 Companies</small></div>
-        </div>
-        <div class="map-frame"><div id="fortune-map"></div></div>
-        <div class="gen-list map-chips" id="fortune-list"></div>
-        <div class="map-note">The metro's Fortune 1000 headquarters, underscoring the corporate travel base that supports Buckhead lodging demand. Click a company to locate it. <span class="legkey"><span class="legstar">★</span> Subject Hotel</span></div>
-      </div>
     </div>
   </div>
 </section>
@@ -738,9 +751,12 @@
         <div class="ti">Analyst</div>
         <a href="mailto:kfelmley@hodgeswardelliott.com">kfelmley@hodgeswardelliott.com</a>
       </div>
+    </div>
+    <h4 style="margin-top:44px">Acquisition Financing Advisor</h4>
+    <div class="contacts">
       <div class="c">
         <div class="nm">Michael Britvan</div>
-        <div class="ti">Managing Director · Acquisition Financing Advisor</div>
+        <div class="ti">Managing Director</div>
         <a href="mailto:mbritvan@hodgeswardelliott.com">mbritvan@hodgeswardelliott.com</a>
       </div>
     </div>
@@ -753,7 +769,6 @@
 </footer>
 
 <!-- ================= SCRIPTS ================= -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   // Glass nav: inline links at top; collapse into hamburger dropdown once scrolled
   var nav=document.getElementById('nav');
@@ -816,140 +831,19 @@
   initAerialZoom('aerialZoom');
   initAerialZoom('aerialZoom2');
 
-  /* ---- Shared map helpers (OpenStreetMap via CARTO Positron tiles) ---- */
-  var HOTEL={name:'Hyatt Place Atlanta Buckhead',lat:33.8449,lng:-84.3669};
-  var TILE_URL='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-  var TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
-
-  function starIcon(){
-    return L.divIcon({className:'',iconSize:[36,36],iconAnchor:[18,18],
-      html:'<div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;">'
-        +'<svg width="32" height="32" viewBox="0 0 24 24" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.45))">'
-        +'<path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 7.1-1.01L12 2z" '
-        +'fill="#b08d57" stroke="#ffffff" stroke-width="1.3" stroke-linejoin="round"/></svg></div>'});
-  }
-  function numIcon(n,bg){
-    bg=bg||'#48606b';
-    return L.divIcon({className:'',iconSize:[22,22],iconAnchor:[11,11],
-      html:'<div style="width:22px;height:22px;border-radius:50%;background:'+bg+';border:2px solid #fff;color:#fff;'
-        +'font:600 11px/1 Poppins,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;'
-        +'box-shadow:0 1px 3px rgba(0,0,0,.35)">'+n+'</div>'});
-  }
-  function fallback(el){el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.style.color='#6e6a5e';el.textContent='Buckhead CBD · Atlanta, GA';}
-
-  // Build a themed Leaflet map: numbered markers + hotel star. Returns {map,markers}.
-  function buildMap(elId,points,opts){
-    opts=opts||{};
-    var el=document.getElementById(elId);
-    if(!el) return null;
-    if(typeof L==='undefined'){ fallback(el); return null; }
-    var map=L.map(el,{scrollWheelZoom:false});
-    L.tileLayer(TILE_URL,{maxZoom:19,attribution:TILE_ATTR}).addTo(map);
-    var markers=points.map(function(p,i){
-      return L.marker([p.lat,p.lng],{icon:numIcon(i+1,opts.color)}).addTo(map)
-        .bindPopup('<b>'+(i+1)+'. '+p.name+'</b>'+(p.note?'<br>'+p.note:''));
-    });
-    var star=L.marker([HOTEL.lat,HOTEL.lng],{icon:starIcon(),zIndexOffset:1000}).addTo(map)
-      .bindPopup('<b>'+HOTEL.name+'</b><br>Subject Property');
-    var group=L.featureGroup(markers.concat([star]));
-    map.fitBounds(group.getBounds().pad(opts.pad||0.15));
-    return {map:map,markers:markers};
-  }
-
-  // Buckhead office market (data from public map, plotted natively on OpenStreetMap)
-  var OFFICE=[
-    {name:'Morgan Stanley Private Wealth',lat:33.84433,lng:-84.37109},
-    {name:'Wells Fargo Private Bank',lat:33.84445,lng:-84.37097},
-    {name:'Amazon',lat:33.84602,lng:-84.37193},
-    {name:'WeWork',lat:33.84451,lng:-84.37129},
-    {name:'Stephens Inc.',lat:33.84676,lng:-84.36854},
-    {name:'PulteGroup',lat:33.84763,lng:-84.36811},
-    {name:'Taft (formerly Morris, Manning & Martin, LLP)',lat:33.84685,lng:-84.36687},
-    {name:'Novelis',lat:33.85399,lng:-84.36283},
-    {name:'Global Payments Inc',lat:33.85218,lng:-84.36723},
-    {name:'Aon',lat:33.85099,lng:-84.36614},
-    {name:'BBDO Atlanta',lat:33.85208,lng:-84.36628},
-    {name:'SAP America Inc.',lat:33.85171,lng:-84.36607},
-    {name:'Baker Donelson',lat:33.85011,lng:-84.36409},
-    {name:'JPMorgan Chase & Co',lat:33.85182,lng:-84.36432},
-    {name:'Goldman Sachs & Co',lat:33.85379,lng:-84.36299},
-    {name:"Carter's",lat:33.84645,lng:-84.37442},
-    {name:'UBS',lat:33.85118,lng:-84.36631},
-    {name:'Merrill Lynch Wealth Management',lat:33.85019,lng:-84.3602},
-    {name:'PGIM',lat:33.8483,lng:-84.36848},
-    {name:'Cousins Properties',lat:33.85015,lng:-84.36117},
-    {name:'Truist Wealth Management',lat:33.8549,lng:-84.35837},
-    {name:'State Street',lat:33.85201,lng:-84.36752},
-    {name:'Barnes & Thornburg LLP',lat:33.84656,lng:-84.36856},
-    {name:'JLL',lat:33.84731,lng:-84.36869},
-    {name:'Fifth Third Private Bank',lat:33.84719,lng:-84.36839},
-    {name:'Barclays Investment Bank',lat:33.84709,lng:-84.36862},
-    {name:'Greenberg Traurig, LLP',lat:33.84598,lng:-84.37176},
-    {name:'SouthState Bank',lat:33.84992,lng:-84.3752},
-    {name:'Salesforce',lat:33.84691,lng:-84.35722},
-    {name:'Weinberg Wheeler Hudgins Gunn & Dial',lat:33.84719,lng:-84.36864},
-    {name:'Buchalter',lat:33.84997,lng:-84.37505}
-  ];
-
-  // Atlanta Fortune 1000 headquarters
-  var FORTUNE=[
-    {name:'The Home Depot',lat:33.84887,lng:-84.43223},
-    {name:'UPS',lat:33.94377,lng:-84.35991},
-    {name:'One Coca-Cola Plaza',lat:33.77115,lng:-84.39727},
-    {name:'Delta',lat:33.65621,lng:-84.42382},
-    {name:'Southern Company',lat:33.76432,lng:-84.38829},
-    {name:'Genuine Parts Company',lat:33.91082,lng:-84.45609},
-    {name:'PulteGroup',lat:33.84763,lng:-84.36811},
-    {name:'Norfolk Southern',lat:33.77312,lng:-84.38778},
-    {name:'Newell Brands',lat:33.91703,lng:-84.35457},
-    {name:'Intercontinental Exchange',lat:33.91021,lng:-84.43061},
-    {name:'Global Payments',lat:33.85099,lng:-84.36614},
-    {name:'Graphic Packaging International',lat:33.91071,lng:-84.43623},
-    {name:'NCR Atleos',lat:33.77926,lng:-84.38952},
-    {name:'Equifax',lat:33.79665,lng:-84.38849},
-    {name:'BlueLinx',lat:33.90571,lng:-84.46747},
-    {name:"Carter's",lat:33.85273,lng:-84.36394},
-    {name:'Acuity',lat:33.78643,lng:-84.38372},
-    {name:'Floor & Decor',lat:33.90496,lng:-84.45656},
-    {name:'Corpay, Inc.',lat:33.84451,lng:-84.37129},
-    {name:'Americold Logistics',lat:33.93574,lng:-84.3621},
-    {name:'Rollins',lat:33.81616,lng:-84.36718},
-    {name:'Gray Media',lat:33.87143,lng:-84.33388},
-    {name:'Beazer Homes',lat:33.9341,lng:-84.35453},
-    {name:'Asbury Automotive Group',lat:34.00514,lng:-84.09347},
-    {name:'Assurant',lat:33.89964,lng:-84.46349},
-    {name:'AGCO Corporation',lat:34.01736,lng:-84.16437},
-    {name:'SiteOne Landscape Supply',lat:34.04384,lng:-84.32517},
-    {name:'Saia, Inc.',lat:34.0593,lng:-84.16683},
-    {name:'Primerica',lat:33.98587,lng:-84.09774}
-  ];
-
-  // Populate a clickable numbered legend and wire it to a map
-  function buildChips(listId,points,mapObj,zoom){
-    var list=document.getElementById(listId);
-    if(!list) return;
-    points.forEach(function(p,i){
-      var c=document.createElement('span');c.className='gen-chip';c.textContent=(i+1)+'. '+p.name;
-      c.setAttribute('data-i',i);list.appendChild(c);
-    });
-    if(mapObj){
-      list.querySelectorAll('.gen-chip').forEach(function(chip){
-        chip.addEventListener('click',function(){
-          var i=+chip.getAttribute('data-i');
-          mapObj.map.flyTo([points[i].lat,points[i].lng],zoom||15);
-          mapObj.markers[i].openPopup();
-        });
+  // Subtle hover parallax on highlight images: photo drifts with the cursor
+  (function(){
+    document.querySelectorAll('.hl-duo figure, .hl-split-media figure, .hl-collage figure, .hl-wide, .hl-quad .ph, .hl-copy-img').forEach(function(el){
+      var img=el.querySelector('img'); if(!img) return;
+      el.addEventListener('mousemove',function(e){
+        var r=el.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5;
+        img.style.transform='scale(1.12) translate('+(px*-8).toFixed(2)+'%,'+(py*-8).toFixed(2)+'%)';
       });
-    }
-  }
+      el.addEventListener('mouseleave',function(){ img.style.transform=''; });
+    });
+  })();
 
-  document.addEventListener('DOMContentLoaded',function(){
-    // Market Context maps + matching clickable legends
-    var office=buildMap('office-map',OFFICE,{color:'#48606b',pad:0.12});
-    buildChips('office-list',OFFICE,office,16);
-    var fortune=buildMap('fortune-map',FORTUNE,{color:'#3b4f58',pad:0.10});
-    buildChips('fortune-list',FORTUNE,fortune,13);
-  });
 </script>
 </body>
 </html>
