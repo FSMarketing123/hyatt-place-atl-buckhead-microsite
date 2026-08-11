@@ -272,6 +272,8 @@
                    font-family:var(--font-cormorant);font-weight:700;line-height:1.12;
                    font-size:clamp(18px,2.4vw,32px);text-shadow:0 1px 1px rgba(255,255,255,.3)}
   .hl-one-titlebar + .hl-one-media{margin-top:0}
+  /* pin the #1 aerial to the very bottom of its section (cancel section bottom padding) */
+  #highlights > .hl-one-media:last-child{margin-bottom:calc(-1*clamp(58px,8.5vh,108px))}
   .hl-one-hint{max-width:1180px;margin:14px auto 0;display:flex;align-items:center;gap:9px;
                font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,237,217,.6)}
   .hl-one-hint::before{content:"";width:26px;height:1px;background:var(--gold)}
