@@ -268,7 +268,7 @@
                    background:rgba(216,221,226,.6);
                    backdrop-filter:blur(8px) saturate(130%);-webkit-backdrop-filter:blur(8px) saturate(130%);
                    border-bottom:1px solid rgba(255,255,255,.4);
-                   color:#2c3b43;padding:clamp(15px,2vw,26px) var(--pad);
+                   color:#2c3b43;padding:clamp(15px,2vw,26px) max(var(--pad),calc(var(--pad) + (100% - 1180px)/2));
                    font-family:var(--font-cormorant);font-weight:700;line-height:1.12;
                    font-size:clamp(18px,2.4vw,32px);text-shadow:0 1px 1px rgba(255,255,255,.3)}
   .hl-one-titlebar + .hl-one-media{margin-top:0}
