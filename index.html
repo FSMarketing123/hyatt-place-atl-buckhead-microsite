@@ -9,7 +9,7 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- Map -->
 
@@ -156,21 +156,30 @@
   .scrollcue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;
              width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:pulse 2.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1;transform:translateX(-50%) scaleY(1)}50%{opacity:.35;transform:translateX(-50%) scaleY(.55)}}
-  /* Hero logo badge — slate disc + gold ring (matches the overview badge), gently animated */
-  .hero-badge{position:absolute;top:36%;left:23%;transform:translate(-50%,-50%);z-index:3;
-              width:clamp(230px,30vw,380px);aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  /* Hero logo badge — large slate disc + gold ring, "Offered Free & Clear" lockup, gently animated */
+  .hero-badge{position:absolute;top:44%;left:29%;transform:translate(-50%,-50%);z-index:3;
+              width:clamp(300px,40vw,560px);aspect-ratio:1;display:flex;align-items:center;justify-content:center;
               animation:heroBadgeFloat 6.5s ease-in-out infinite}
-  .hero-badge .ring{position:absolute;inset:-9%;border-radius:50%;border:1px solid var(--gold);opacity:.55;
+  .hero-badge .ring{position:absolute;inset:-6.5%;border-radius:50%;border:1px solid var(--gold);opacity:.55;
                     animation:heroRingBreathe 6.5s ease-in-out infinite}
   .hero-badge .disc{position:relative;z-index:2;width:100%;height:100%;border-radius:50%;
                     background:radial-gradient(circle at 32% 30%,var(--slate-lt),var(--slate) 60%,var(--slate-mid));
                     box-shadow:0 34px 70px -24px rgba(44,59,67,.6);
-                    display:flex;align-items:center;justify-content:center}
-  .hero-badge .disc img{width:62%;height:auto;filter:drop-shadow(0 3px 12px rgba(0,0,0,.35))}
-  @keyframes heroBadgeFloat{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-56%)}}
-  @keyframes heroRingBreathe{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:.8}}
-  @media(max-width:760px){
-    .hero-badge{top:40%;left:50%;width:clamp(200px,62vw,300px)}
+                    display:flex;flex-direction:column;align-items:center;justify-content:center;
+                    text-align:center;padding:0 12%}
+  .hero-badge .badge-copy{color:#fff;font-family:var(--font-poppins);text-transform:uppercase}
+  .hero-badge .badge-copy .l1{display:block;font-weight:800;line-height:.98;letter-spacing:.01em;
+                              font-size:clamp(30px,4vw,60px)}
+  .hero-badge .badge-copy .l2{display:block;font-weight:800;line-height:.98;letter-spacing:.01em;
+                              font-size:clamp(25px,3.35vw,50px);margin-top:.08em}
+  .hero-badge .badge-copy .l3{display:block;font-weight:600;line-height:1.12;letter-spacing:.04em;
+                              font-size:clamp(12px,1.42vw,21px);margin-top:.7em;color:rgba(255,255,255,.94)}
+  .hero-badge .badge-logo{width:62%;margin-top:clamp(20px,3vw,40px)}
+  .hero-badge .badge-logo img{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 12px rgba(0,0,0,.35))}
+  @keyframes heroBadgeFloat{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-54%)}}
+  @keyframes heroRingBreathe{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.04);opacity:.8}}
+  @media(max-width:900px){
+    .hero-badge{top:42%;left:50%;width:clamp(260px,74vw,420px)}
   }
   @media(prefers-reduced-motion:reduce){
     .hero-badge,.hero-badge .ring{animation:none}
@@ -255,9 +264,11 @@
   .hl.cream .hl-body strong{color:var(--slate)}
 
   /* RevPAR bracketed callout band */
-  .hl-callout{max-width:1180px;margin:clamp(32px,4.5vw,54px) auto 0;display:flex;align-items:stretch;gap:clamp(16px,3vw,42px);
+  .hl-callout{max-width:1180px;margin:clamp(32px,4.5vw,54px) auto;display:flex;align-items:stretch;gap:clamp(16px,3vw,42px);
               padding:clamp(20px,2.8vw,32px) clamp(26px,4.5vw,60px);border-radius:4px;
-              background:linear-gradient(90deg,#e7ddc6,#f4eeda 50%,#e7ddc6)}
+              background:linear-gradient(90deg,#e7ddc6,#f4eeda 50%,#e7ddc6);
+              transition:transform .4s cubic-bezier(.4,0,.2,1),box-shadow .4s ease;transform-origin:center}
+  .hl-callout:hover{transform:scale(1.035);box-shadow:0 26px 60px -22px rgba(44,59,67,.5)}
   .hl-callout .co-bk{flex:0 0 auto;width:clamp(12px,1.4vw,18px);border:3px solid #5b5a87}
   .hl-callout .co-bk.l{border-right:0}
   .hl-callout .co-bk.r{border-left:0}
@@ -547,7 +558,14 @@
   <div class="veil"></div>
   <div class="hero-badge">
     <div class="ring"></div>
-    <div class="disc"><img src="assets/hp-stack-color-white.svg" alt="Hyatt Place Atlanta Buckhead"></div>
+    <div class="disc">
+      <div class="badge-copy">
+        <span class="l1">Offered</span>
+        <span class="l2">Free &amp; Clear</span>
+        <span class="l3">of Management, Brand,<br>and Financing</span>
+      </div>
+      <div class="badge-logo"><img src="assets/hp-horz-color-white.svg" alt="Hyatt Place Atlanta Buckhead"></div>
+    </div>
   </div>
   <h1 class="sr-only">Hyatt Place Atlanta Buckhead — Offered by Hodges Ward Elliott</h1>
   <div class="scrollcue"></div>
@@ -723,16 +741,16 @@
       <figure class="cp-fig"><div class="ph"><img src="assets/cp-piedmont.jpg" alt="CP Group — Piedmont Center redevelopment"><span class="logo-ov corner"><img src="assets/logo-cp.svg" alt="CP Group"></span><span class="blurb">Atlanta-based commercial real estate owner-operator; its redevelopment of nearby Piedmont Center is adding amenities, dining, and retail.</span></div><figcaption>Redevelopment of Piedmont Center</figcaption></figure>
     </div>
   </div>
+  <div class="hl-callout">
+    <span class="co-bk l" aria-hidden="true"></span>
+    <span class="co-text">YTD RevPAR has increased 6.5% year over year as of July 2026</span>
+    <span class="co-bk r" aria-hidden="true"></span>
+  </div>
   <div class="hl-quad">
     <figure><div class="ph"><img src="assets/ww-3344.jpg" alt="Weinberg Wheeler at 3344 Peachtree"><span class="logo-ov"><img src="assets/logo-ww.svg" alt="Weinberg Wheeler"></span><span class="blurb">National litigation firm that expanded its Buckhead office at 3344 Peachtree.</span></div><figcaption>3344 Peachtree</figcaption></figure>
     <figure><div class="ph"><img src="assets/rayonier-t100.jpg" alt="Rayonier at Terminus 100"><span class="logo-ov"><img src="assets/logo-rayonier.svg" alt="Rayonier"></span><span class="blurb">Timberland real estate investment trust that chose Terminus 100 for its headquarters.</span></div><figcaption>Terminus 100</figcaption></figure>
     <figure><div class="ph"><img src="assets/gt-t200.jpg" alt="Greenberg Traurig at Terminus 200"><span class="logo-ov"><img src="assets/logo-gt.svg" alt="Greenberg Traurig"></span><span class="blurb">Global law firm that renewed its Buckhead office at Terminus 200.</span></div><figcaption>Terminus 200</figcaption></figure>
     <figure><div class="ph"><img src="assets/southstate-prom.jpg" alt="SouthState Bank at Prominence Tower"><span class="logo-ov"><img src="assets/logo-southstate.svg" alt="SouthState Bank"></span><span class="blurb">Regional bank that established a major presence at Prominence Tower.</span></div><figcaption>Prominence Tower</figcaption></figure>
-  </div>
-  <div class="hl-callout">
-    <span class="co-bk l" aria-hidden="true"></span>
-    <span class="co-text">YTD RevPAR has increased 6.5% year over year as of July 2026</span>
-    <span class="co-bk r" aria-hidden="true"></span>
   </div>
 </section>
 
