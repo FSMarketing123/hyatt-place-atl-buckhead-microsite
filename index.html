@@ -130,7 +130,9 @@
            letter-spacing:.2em;text-transform:uppercase;padding:20px 13px;white-space:nowrap;
            border-radius:0 4px 4px 0;box-shadow:2px 4px 22px rgba(0,0,0,.28);transition:background .2s,padding .2s}
   .pin-cta:hover{background:var(--red-lt);padding-left:17px}
-  @media(max-width:600px){.pin-cta{font-size:10px;padding:16px 11px}}
+  .pin-cta .pin-short{display:none}
+  @media(max-width:600px){.pin-cta{font-size:10px;padding:16px 11px}
+    .pin-cta .pin-full{display:none}.pin-cta .pin-short{display:inline}}
 
   /* ---------- HERO ---------- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;
@@ -482,7 +484,7 @@
 </nav>
 
 <!-- Pinned CTA (left edge) -->
-<a class="pin-cta" href="#access">Access the Offering</a>
+<a class="pin-cta" href="#access"><span class="pin-full">Access the Offering</span><span class="pin-short">Sign CA</span></a>
 
 <!-- ================= HERO ================= -->
 <header class="hero" id="top">
@@ -792,27 +794,53 @@
     update();
   })();
 
-  // Aerial images: click to zoom into that point + pan on move, click to reset
+  // Aerial images: click/tap to zoom into that point, move/drag to pan, click/tap again to reset
   function initAerialZoom(id){
     var wrap=document.getElementById(id);
     if(!wrap) return;
     var img=wrap.querySelector('img');
-    function setOrigin(e){
+    function setOrigin(cx,cy){
       var r=wrap.getBoundingClientRect();
-      var x=Math.max(0,Math.min(100,((e.clientX-r.left)/r.width)*100));
-      var y=Math.max(0,Math.min(100,((e.clientY-r.top)/r.height)*100));
+      var x=Math.max(0,Math.min(100,((cx-r.left)/r.width)*100));
+      var y=Math.max(0,Math.min(100,((cy-r.top)/r.height)*100));
       img.style.transformOrigin=x+'% '+y+'%';
     }
-    wrap.addEventListener('click',function(e){
+    function toggle(cx,cy){
       if(wrap.classList.contains('zoomed')){
         wrap.classList.remove('zoomed');
         img.style.transformOrigin='center center';
       } else {
-        setOrigin(e);
+        setOrigin(cx,cy);
         wrap.classList.add('zoomed');
       }
+    }
+    // Desktop: click toggles, mouse move pans
+    var suppressClick=false;
+    wrap.addEventListener('click',function(e){
+      if(suppressClick){ suppressClick=false; return; }
+      toggle(e.clientX,e.clientY);
     });
-    wrap.addEventListener('mousemove',function(e){ if(wrap.classList.contains('zoomed')) setOrigin(e); });
+    wrap.addEventListener('mousemove',function(e){ if(wrap.classList.contains('zoomed')) setOrigin(e.clientX,e.clientY); });
+    // Touch: tap to zoom at that point, drag to pan, tap again to reset
+    var moved=false, sx=0, sy=0;
+    wrap.addEventListener('touchstart',function(e){
+      if(e.touches.length!==1) return;
+      moved=false; sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+    },{passive:true});
+    wrap.addEventListener('touchmove',function(e){
+      if(e.touches.length!==1) return;
+      var t=e.touches[0];
+      if(Math.abs(t.clientX-sx)>6 || Math.abs(t.clientY-sy)>6) moved=true;
+      if(wrap.classList.contains('zoomed')){ setOrigin(t.clientX,t.clientY); e.preventDefault(); }
+    },{passive:false});
+    wrap.addEventListener('touchend',function(e){
+      if(!moved){
+        var t=e.changedTouches && e.changedTouches[0];
+        if(t) toggle(t.clientX,t.clientY);
+        suppressClick=true;                       // swallow the synthetic click that follows a tap
+        setTimeout(function(){ suppressClick=false; },700);
+      }
+    });
   }
   initAerialZoom('aerialZoom');
   initAerialZoom('aerialZoom2');
